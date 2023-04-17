@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="Fragment_login_ViewModel"
+            type="samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Fragment_login_ViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:windowSoftInputMode="stateUnchanged"
+        android:background="@color/teal_200">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="343dp"
+            android:layout_height="378dp"
+            android:layout_marginTop="164dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/background_login" />
+
+        <TextView
+            android:id="@+id/textabc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="180dp"
+            android:text="Đăng nhập"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.228"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_nameapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="88dp"
+            android:text="Learn English"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.288"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/taikhoan"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="240dp"
+            android:background="@drawable/backgroundedittext_login"
+            android:hint="Tài khoản"
+            android:text="@={Fragment_login_ViewModel.taikhoan}"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.343"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/matkhau"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="304dp"
+            android:background="@drawable/backgroundedittext_login"
+            android:hint="Mật khẩu"
+            android:text="@={Fragment_login_ViewModel.matkhau}"
+            android:drawableRight="@drawable/visibility_off"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:imeOptions="actionDone"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.335"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Đăng nhập"
+            android:textColor="@color/black"
+            android:enabled="false"
+            android:padding="10dp"
+            android:background="@drawable/button_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.439"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/matkhau" />
+
+        <TextView
+            android:id="@+id/taomoi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Bạn chưa có tài khoản? Đăng kí ngay!"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.632"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_login" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/bird"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bird_login"
+            android:background=" #accfe3"
+            android:visibility="gone"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

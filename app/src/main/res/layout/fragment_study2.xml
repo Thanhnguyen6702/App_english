@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/linearLayout1"
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="132dp"
+        android:background="@drawable/background_login"
+        android:elevation="30dp"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/Tienganh_study"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tiếng anh"
+            android:textColor="@color/green"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/phienam_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="phiên âm"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tiengviet_study"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:text="Tiếng việt"
+            android:textColor="@color/green"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:text="Nhấn để xem ví dụ" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/linearLayout2"
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="132dp"
+        android:background="@drawable/background_login"
+        android:elevation="30dp"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/teal_200"/>
+        <TextView
+            android:id="@+id/Tienganh_study_overleaf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tiếng anh"
+            android:textColor="@color/green"
+            android:textSize="25dp" />
+        <TextView
+            android:id="@+id/definition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textSize="18dp"
+            android:ellipsize="end"
+            android:layout_marginTop="40dp"/>
+        <TextView
+            android:id="@+id/example"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Từ này mình không có ví dụ :("
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/voice_study"
+        android:layout_width="46dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="508dp"
+        android:background="@drawable/mic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
