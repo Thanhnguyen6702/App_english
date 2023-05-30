@@ -41,7 +41,12 @@
             app:destination="@id/fragment_learn" />
         <action
             android:id="@+id/action_fragment_home_to_fragment_study"
-            app:destination="@id/fragment_study" />
+            app:destination="@id/fragment_study"
+            app:popUpTo="@layout/fragment_home"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_topic"
+            app:destination="@id/fragment_topic" />
     </fragment>
     <fragment
         android:id="@+id/fragment_list"
@@ -55,13 +60,13 @@
         android:id="@+id/action_activitymain_to_fragment_list"
         app:destination="@+id/fragment_list"/>
     <fragment
-        android:id="@+id/fragment_favorite"
-        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_favorite"
+        android:id="@+id/fragment_voice"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_pron"
         android:label="Fragment_favorite"
-        tools:layout="@layout/fragment_favorite"/>
+        tools:layout="@layout/fragment_pron"/>
     <action
-        android:id="@+id/action_activitymain_to_fragment_favorite"
-        app:destination="@id/fragment_favorite" />
+        android:id="@+id/action_activitymain_to_fragment_voice"
+        app:destination="@id/fragment_voice" />
     <fragment
         android:id="@+id/fragment_learn"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_learn"
@@ -81,6 +86,11 @@
             app:destination="@id/fragment_study2"
             app:popUpTo="@layout/fragment_study"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_study_to_fragment_finish"
+            app:destination="@+id/fragment_finish"
+            app:popUpTo="@layout/fragment_study"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_study2"
@@ -95,5 +105,14 @@
         android:id="@+id/fragment_finish"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_finish"
         android:label="Fragment_finish"
-        tools:layout="@layout/fragment_finish"/>
+        tools:layout="@layout/fragment_finish">
+        <action
+            android:id="@+id/action_fragment_finish_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_topic"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_topic"
+        android:label="Fragment_topic"
+        tools:layout="@layout/fragment_topic"/>
 </navigation>

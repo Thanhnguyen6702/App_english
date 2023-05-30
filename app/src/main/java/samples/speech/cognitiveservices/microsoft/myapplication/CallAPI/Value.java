@@ -7,6 +7,16 @@ import io.reactivex.rxjava3.core.Observable;
 public class Value {
     private String Tienganh;
     private String Tiengviet;
+    private String Checkday;
+
+    public String getCheckday() {
+        return Checkday;
+    }
+
+    public void setCheckday(String checkday) {
+        Checkday = checkday;
+    }
+
     public String getTienganh() {
         return Tienganh;
     }

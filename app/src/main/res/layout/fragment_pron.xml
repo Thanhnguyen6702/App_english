@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/imgBoy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/boy"
+        android:layout_below="@+id/luyenphatam"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/textBoy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:textColor="@color/black"
+        android:text="hello"
+        android:textCursorDrawable="@id/imgBoy"
+        android:textSize="15dp"
+        android:layout_toEndOf="@id/imgBoy"
+        android:layout_alignTop="@id/imgBoy"
+        android:layout_alignBottom="@id/imgBoy"
+        android:gravity="center_vertical"
+        android:layout_marginStart="20dp"/>
+    <TextView
+        android:id="@+id/luyenphatam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Luyện phát âm"
+        android:textSize="25dp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"/>
+    <TextView
+        android:id="@+id/tienganh_assess"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tieng_anh"
+        android:layout_marginTop="200dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/phienam_assess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tienganh_assess"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="phiên âm"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+    <TextView
+        android:id="@+id/tiengviet_assess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tieng_viet"
+        android:layout_below="@+id/phienam_assess"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginStart="15dp"/>
+    <ImageView
+        android:id="@+id/mic_assess"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/mic"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"/>
+
+    <ImageView
+        android:id="@+id/volume_assess"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/mic_assess"
+        android:layout_alignBottom="@+id/mic_assess"
+
+        android:layout_toStartOf="@+id/mic_assess"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/volume" />
+    <ImageView
+        android:id="@+id/next_pron"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/next"
+        android:layout_toEndOf="@+id/mic_assess"
+        android:layout_alignTop="@+id/mic_assess"
+        android:layout_marginStart="40dp"/>
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -52,6 +53,7 @@ public class Fragment_login extends Fragment {
         Fragment_login_ViewModel fragment_login_viewModel = new Fragment_login_ViewModel();
         fragmentLoginBinding.setFragmentLoginViewModel(fragment_login_viewModel);
         data_login = ((MainActivity) requireActivity()).getData_login();
+        SharedPreferences.Editor editor = requireContext().getSharedPreferences("user",Context.MODE_PRIVATE).edit();
         Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_login);
@@ -67,10 +69,12 @@ public class Fragment_login extends Fragment {
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull ResponseBody s) {
                 try {
                     if (s.string().equals("success")) {
+                        editor.putString("account",fragmentLoginBinding.taikhoan.getText().toString());
+                        editor.apply();
+                        data_login.setData(fragmentLoginBinding.taikhoan.getText().toString());
                         NavController navController = Navigation.findNavController(fragmentLoginBinding.getRoot());
                         navController.navigate(R.id.action_fragment_login_to_fragment_home);
                         navController.popBackStack(R.id.fragment_login, true);
-                        data_login.setData(fragmentLoginBinding.taikhoan.getText().toString());
                         get_data();
                         get_listvalue();
                     } else {
@@ -107,10 +111,10 @@ public class Fragment_login extends Fragment {
                 String input2 = fragmentLoginBinding.matkhau.getText().toString().trim();
                 if (!input1.equals("") && !input2.equals("")) {
                     fragmentLoginBinding.buttonLogin.setEnabled(true);
-                    fragmentLoginBinding.buttonLogin.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    fragmentLoginBinding.buttonLogin.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 } else {
                     fragmentLoginBinding.buttonLogin.setEnabled(false);
-                    fragmentLoginBinding.buttonLogin.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                    fragmentLoginBinding.buttonLogin.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                 }
             }
 
@@ -132,7 +136,7 @@ public class Fragment_login extends Fragment {
             }
         };
         spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.teal_200)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.teal_200)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         fragmentLoginBinding.taomoi.setText(spannableString);
         fragmentLoginBinding.taomoi.setMovementMethod(LinkMovementMethod.getInstance());
         fragmentLoginBinding.getRoot().setOnTouchListener((v, event) -> {
@@ -197,6 +201,5 @@ public class Fragment_login extends Fragment {
             }
         });
     }
-
 
 }

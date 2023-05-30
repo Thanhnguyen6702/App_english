@@ -7,15 +7,6 @@ public class Detail_info {
     private List<Value> sap_thuoc;
     private List<Value> da_thuoc;
     private List<Value> hoc;
-    private List<Vocabulary> chua_hoc;
-    public List<Vocabulary> getChua_hoc() {
-        return chua_hoc;
-    }
-
-    public void setChua_hoc(List<Vocabulary> chua_hoc) {
-        this.chua_hoc = chua_hoc;
-    }
-
     public List<Value> getHoc() {
         return hoc;
     }

@@ -1,26 +1,7 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.CallAPI;
 
-public class Vocabulary {
-    private String Tienganh;
-    private String Tiengviet;
+public class Vocabulary extends Value {
     private String Phienam;
-
-    public String getTienganh() {
-        return Tienganh;
-    }
-
-    public void setTienganh(String tienganh) {
-        Tienganh = tienganh;
-    }
-
-    public String getTiengviet() {
-        return Tiengviet;
-    }
-
-    public void setTiengviet(String tiengviet) {
-        Tiengviet = tiengviet;
-    }
-
     public String getPhienam() {
         return Phienam;
     }

@@ -2,6 +2,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,18 +25,23 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.ApiService;
+import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Definition;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Detail_info;
+import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Example;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Value;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.databinding.FragmentStudyBinding;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
+import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_revise;
 
 public class Fragment_study extends Fragment {
     FragmentStudyBinding fragmentStudyBinding;
     ShareViewModel shareViewModel;
     List<Vocabulary> chua_hoc;
     List<Value> listvalue;
+    Share_revise share_revise;
+    List<Value> reviseList = new ArrayList<>();
     String[] arrayAnswer = new String[4];
     Random random = new Random();
     int check, start;
@@ -45,8 +52,10 @@ public class Fragment_study extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentStudyBinding = FragmentStudyBinding.inflate(inflater, container, false);
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
+        share_revise = ((MainActivity) requireActivity()).getData_revise();
         chua_hoc = shareViewModel.getChuahoc().getValue();
         String account = shareViewModel.getData().getValue();
+        getDefin_Examp(chua_hoc.get(0).getTienganh());
         listvalue = shareViewModel.getListValue().getValue();
         check = listvalue.size() - 1;
         start = random.nextInt(1000) % check;
@@ -66,15 +75,19 @@ public class Fragment_study extends Fragment {
         fragmentStudyBinding.Tiengviet3Study.setText(arrayAnswer[2]);
         fragmentStudyBinding.Tiengviet4Study.setText(arrayAnswer[3]);
         fragmentStudyBinding.closeStudy.setOnClickListener(view -> {
-            NavController navController = Navigation.findNavController(fragmentStudyBinding.getRoot());
-            navController.popBackStack();
+            share_revise.setValue_resive(reviseList);
+            if (reviseList != null) {
+                NavController navController = Navigation.findNavController(fragmentStudyBinding.getRoot());
+                navController.navigate(R.id.action_fragment_study_to_fragment_finish);
+            }
             get_data();
         });
         fragmentStudyBinding.Tiengviet1Study.setOnClickListener(view -> {
             if (fragmentStudyBinding.Tiengviet1Study.getText().equals(chua_hoc.get(0).getTiengviet())) {
                 fragmentStudyBinding.Tiengviet1Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
-                if (0 < chua_hoc.size() - 1) next();
+                next();
+                share_revise.setValue_resive(reviseList);
             } else {
                 fragmentStudyBinding.Tiengviet1Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);
@@ -86,7 +99,9 @@ public class Fragment_study extends Fragment {
             if (fragmentStudyBinding.Tiengviet2Study.getText().equals(chua_hoc.get(0).getTiengviet())) {
                 fragmentStudyBinding.Tiengviet2Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
-                if (0 < chua_hoc.size() - 1) next();
+                next();
+                share_revise.setValue_resive(reviseList);
+
             } else {
                 fragmentStudyBinding.Tiengviet2Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);
@@ -99,7 +114,9 @@ public class Fragment_study extends Fragment {
             if (fragmentStudyBinding.Tiengviet3Study.getText().equals(chua_hoc.get(0).getTiengviet())) {
                 fragmentStudyBinding.Tiengviet3Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
-                if (0 < chua_hoc.size() - 1) next();
+                next();
+                share_revise.setValue_resive(reviseList);
+
             } else {
                 fragmentStudyBinding.Tiengviet3Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);
@@ -111,7 +128,8 @@ public class Fragment_study extends Fragment {
             if (fragmentStudyBinding.Tiengviet4Study.getText().equals(chua_hoc.get(0).getTiengviet())) {
                 fragmentStudyBinding.Tiengviet4Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
-                if (0 < chua_hoc.size() - 1) next();
+                next();
+                share_revise.setValue_resive(reviseList);
             } else {
                 fragmentStudyBinding.Tiengviet4Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);
@@ -122,6 +140,9 @@ public class Fragment_study extends Fragment {
 
     public void next() {
         handler.postDelayed(() -> {
+            chua_hoc.get(0).setCheckday("1");
+
+            reviseList.add(chua_hoc.get(0));
             NavController navController = Navigation.findNavController(fragmentStudyBinding.getRoot());
             navController.navigate(R.id.action_fragment_study_to_fragment_study2);
         }, 750);
@@ -182,15 +203,60 @@ public class Fragment_study extends Fragment {
         });
     }
 
+    public void getDefin_Examp(String word) {
+        ApiService.apiService.getDefinition(word).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Definition>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Definition definition1) {
+                share_revise.setDefinition(definition1);
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        ApiService.apiService.getExample(word).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Example>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Example example1) {
+                share_revise.setExample(example1);
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     public void disableImageview() {
         fragmentStudyBinding.Tiengviet1Study.setEnabled(false);
         fragmentStudyBinding.Tiengviet2Study.setEnabled(false);
         fragmentStudyBinding.Tiengviet3Study.setEnabled(false);
         fragmentStudyBinding.Tiengviet4Study.setEnabled(false);
     }
-    public void disableImageview(View view){
+
+    public void disableImageview(View view) {
         view.setEnabled(false);
-        handler.postDelayed(() -> view.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.button_disable)),500);
+        handler.postDelayed(() -> view.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_disable)), 500);
 
     }
 }

@@ -10,30 +10,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Value_revise;
+import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Value;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 
 public class Finish_Adapter extends RecyclerView.Adapter<Finish_Adapter.Finish_ViewHolder> {
-    public List<Value_revise> valueList;
-    public Finish_Adapter(List<Value_revise> reviseList){
+    public List<Value> valueList;
+
+    public Finish_Adapter(List<Value> reviseList) {
         valueList = reviseList;
     }
+
     @NonNull
     @Override
     public Finish_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_finish, parent, false);
-        view.setOnClickListener(v -> {
-
-        });
         return new Finish_ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Finish_ViewHolder holder, int position) {
-        Value_revise value = valueList.get(position);
+        Value value = valueList.get(position);
         holder.tienganh.setText(value.getTienganh());
         holder.tiengviet.setText(value.getTiengviet());
-        holder.ngayontap.setText(value.getDay_revise());
+        holder.ngayontap.setText(value.getCheckday()+" ngày");
     }
 
     @Override

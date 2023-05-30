@@ -13,13 +13,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
+
 import retrofit2.http.Query;
 
 public interface ApiService {
     //link api : https://thanhhust.x10.mx/thanh/getdata2.php
-    //link api : https://api.dictionaryapi.dev/api/v2/entries/en/
+
     HttpLoggingInterceptor httpinterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     OkHttpClient.Builder okBuilder = new OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
@@ -32,14 +33,6 @@ public interface ApiService {
             .client(okBuilder.build())
             .build()
             .create(ApiService.class);
-    ApiService apiService2 = new Retrofit.Builder()
-            .baseUrl("https://api.dictionaryapi.dev/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .client(okBuilder.build())
-            .build()
-            .create(ApiService.class);
-
     @GET("thanh/getdata2.php")
     Observable<List<Value>> getListValue(@Query("table") String table);
 
@@ -63,6 +56,12 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/thanh/study.php")
     Observable<Void> postStudy(@Field("account") String account,@Field("answer") String answer);
-    @GET("api/v2/entries/en/{word}")
-    Observable<List<Word>> getWord(@Path("word") String word);
+    @GET("thanh/study_topic.php")
+    Observable<List<Vocabulary>> getStudy_topic(@Query("account") String account,@Query("topic") String topic);
+    @GET("thanh/topic.php")
+    Observable<List<Topic>> getTopic(@Query("account") String account);
+    @GET("thanh/definitions.php")
+    Observable<Definition> getDefinition(@Query("word") String word);
+    @GET("thanh/examples.php")
+    Observable<Example> getExample(@Query("word") String word);
 }

@@ -15,6 +15,7 @@ public class ShareViewModel extends ViewModel {
     private final MutableLiveData<Detail_info> shareData_detail = new MutableLiveData<>();
     private final MutableLiveData<List<Value>> share_listValue = new MutableLiveData<>();
     private  final  MutableLiveData<List<Vocabulary>> share_chuahoc = new MutableLiveData<>();
+    private final MutableLiveData<List<Vocabulary>> share_phatam = new MutableLiveData<>();
     public void setShare_chuahoc(List<Vocabulary> vocabulary){
         share_chuahoc.setValue(vocabulary);
     }
@@ -36,5 +37,11 @@ public class ShareViewModel extends ViewModel {
     }
     public LiveData<List<Value>> getListValue(){
         return share_listValue;
+    }
+    public LiveData<List<Vocabulary>> get_phatam(){
+        return share_phatam;
+    }
+    public void setShare_phatam(List<Vocabulary> phatam){
+        share_phatam.setValue(phatam);
     }
 }

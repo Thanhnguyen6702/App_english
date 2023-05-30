@@ -18,117 +18,94 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.ApiService;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
-import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Word;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
+import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_revise;
 
 public class Fragment_study2 extends Fragment {
     LinearLayout linearLayout1, linearLayout2;
     ShareViewModel shareViewModel;
+    Share_revise share_revise;
     TextView text_example, tienganh, tiengviet, phienam, category, tienganh_overleaf, define;
     ImageView voice;
-    Word listdata;
     int start = 0;
-    int end;
-    Boolean check = false;
+    int end=-1;
+    List<Prep> preps = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_study2, container, false);
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
+        share_revise = ((MainActivity) requireActivity()).getData_revise();
         List<Vocabulary> chuahoc = shareViewModel.getChuahoc().getValue();
         linearLayout1 = view.findViewById(R.id.linearLayout1);
         linearLayout2 = view.findViewById(R.id.linearLayout2);
         linearLayout1.setEnabled(false);
-        getData(chuahoc.get(0).getTienganh());
         voice = view.findViewById(R.id.voice_study);
         tienganh = linearLayout1.findViewById(R.id.Tienganh_study);
         tiengviet = linearLayout1.findViewById(R.id.tiengviet_study);
         phienam = linearLayout1.findViewById(R.id.phienam_2);
-        text_example = linearLayout2.findViewById(R.id.example);
+        text_example = linearLayout1.findViewById(R.id.text_example);
         category = linearLayout2.findViewById(R.id.category);
         define = linearLayout2.findViewById(R.id.definition);
         tienganh_overleaf = linearLayout2.findViewById(R.id.Tienganh_study_overleaf);
+        share_revise.getExample().observe(getViewLifecycleOwner(), example -> {
+            if (example.getExample()!=null) {
+                text_example.setText("Eg: "+example.getExample().get(0));
+            }
+        });
+        share_revise.getDefinition().observe(getViewLifecycleOwner(), definition1 -> {
+            if (definition1 != null) {
+                linearLayout1.setEnabled(true);
+                if (!definition1.getMeaning().getNoun().isEmpty())
+                    preps.add(new Fragment_study2.Prep("noun", definition1.getMeaning().getNoun().get(0)));
+                if (!definition1.getMeaning().getVerb().isEmpty())
+                    preps.add(new Fragment_study2.Prep("verb", definition1.getMeaning().getVerb().get(0)));
+                if (!definition1.getMeaning().getAdjective().isEmpty())
+                    preps.add(new Fragment_study2.Prep("adjective", definition1.getMeaning().getAdjective().get(0)));
+                if (!definition1.getMeaning().getAdverb().isEmpty())
+                    preps.add(new Fragment_study2.Prep("adverb", definition1.getMeaning().getAdverb().get(0)));
+                end = preps.size() - 1;
+            }
+        });
         tiengviet.setText(chuahoc.get(0).getTiengviet());
         tienganh.setText(chuahoc.get(0).getTienganh());
         phienam.setText(chuahoc.get(0).getPhienam());
-        voice.setOnClickListener(view1->{
-            NavController navController = Navigation.findNavController(view);
-            navController.popBackStack();
+        voice.setOnClickListener(view1 -> {
             chuahoc.remove(0);
             shareViewModel.setShare_chuahoc(chuahoc);
+            NavController navController = Navigation.findNavController(view);
+            if (!chuahoc.isEmpty()) {
+                navController.popBackStack();
+            } else {
+                navController.navigate(R.id.action_fragment_study2_to_fragment_finish);
+            }
+
         });
         linearLayout1.setOnClickListener(view1 -> {
             flipViews(linearLayout1, linearLayout2);
             tienganh_overleaf.setText(chuahoc.get(0).getTienganh());
-            try {
+            define.setText(preps.get(0).value);
+            set_background(preps.get(0).key);
 
-            if (check) {
-                boolean check_ex = true;
-                for(int i=0;i<listdata.getMeaning().get(start).getDefinitions().size();i++){
-                    if (listdata.getMeaning().get(start).getDefinitions().get(i).getExample() != null){
-                        text_example.setText("Eg: " + listdata.getMeaning().get(start).getDefinitions().get(i).getExample());
-                        check_ex = false;
-                        break;
-                    }
-                }
-
-                if(check_ex){
-                    text_example.setText("Mình chưa có ví dụ cho từ này :(");
-                }
-                if(listdata.getMeaning().get(start).getDefinitions().get(0).getDefinition()!=null && listdata.getMeaning().get(start).getPartOfSpeech()!=null ) {
-                    define.setText(listdata.getMeaning().get(start).getDefinitions().get(0).getDefinition());
-                    set_background(listdata.getMeaning().get(start).getPartOfSpeech());
-                }
-                else {
-                    linearLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.grey_100));
-                }
-            }}catch (Exception e){
-                e.printStackTrace();
-            }
         });
-        linearLayout2.setOnClickListener(view1->{
-            try{
-            if(start<end) {
-                start++;
-                flipViews(linearLayout2, linearLayout2);
-                if (check) {
-                    boolean check_ex = true;
-                    for(int i=0;i<listdata.getMeaning().get(start).getDefinitions().size();i++){
-                        if (listdata.getMeaning().get(start).getDefinitions().get(i).getExample() != null){
-                            text_example.setText("Eg: " + listdata.getMeaning().get(start).getDefinitions().get(i).getExample());
-                            Log.e("loi",""+i);
-                            check_ex = false;
-                            break;
-                        }
-                    }
-
-                    if(check_ex){
-                        text_example.setText("Mình chưa có ví dụ cho từ này :(");
-                    }
-                    if(listdata.getMeaning().get(start).getDefinitions().get(0).getDefinition()!=null && listdata.getMeaning().get(start).getPartOfSpeech()!=null ) {
-                        define.setText(listdata.getMeaning().get(start).getDefinitions().get(0).getDefinition());
-                        set_background(listdata.getMeaning().get(start).getPartOfSpeech());
-                    }
-                    else {
-                        linearLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.grey_100));
-                    }
+        linearLayout2.setOnClickListener(view1 -> {
+            try {
+                if (start < end) {
+                    start++;
+                    flipViews(linearLayout2, linearLayout2);
+                    define.setText(preps.get(start).value);
+                    set_background(preps.get(start).key);
+                } else {
+                    flipViews(linearLayout2, linearLayout1);
+                    start = 0;
                 }
-
-            }else {
-                flipViews(linearLayout2,linearLayout1);
-                start=0;
-            }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -136,46 +113,25 @@ public class Fragment_study2 extends Fragment {
         return view;
     }
 
-    public void getData(String word) {
-        ApiService.apiService2.getWord(word).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Word>>() {
-            @Override
-            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<Word> word) {
-                listdata = word.get(0);
-                check = true;
-            }
-
-            @Override
-            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                check = false;
-                linearLayout1.setEnabled(true);
-
-            }
-
-            @Override
-            public void onComplete() {
-                linearLayout1.setEnabled(true);
-                end=listdata.getMeaning().size()-1;
-            }
-        });
-    }
 
     public void set_background(String s) {
-        if (s.equals("noun")) {
-            linearLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue_100));
-            category.setText("N");
-        }
-       else if (s.equals("adjective")) {
-            linearLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.orange_100));
-            category.setText("Adj");
-        }
-       else if (s.equals("verb")) {
-            linearLayout2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_100));
-            category.setText("V");
+        switch (s) {
+            case "noun":
+                linearLayout2.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.blue_100));
+                category.setText("N");
+                break;
+            case "adjective":
+                linearLayout2.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.orange_100));
+                category.setText("Adj");
+                break;
+            case "verb":
+                linearLayout2.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.green_100));
+                category.setText("V");
+                break;
+            case "adverb":
+                linearLayout2.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.purple_200));
+                category.setText("Adv");
+                break;
         }
 
     }
@@ -204,4 +160,13 @@ public class Fragment_study2 extends Fragment {
         frontLayout.startAnimation(flipOut);
     }
 
+    static class Prep {
+        String key;
+        String value;
+
+        public Prep(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
 }

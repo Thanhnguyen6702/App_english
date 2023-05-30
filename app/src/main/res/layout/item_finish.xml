@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:padding="10dp">
     <ImageView
+        android:id="@+id/image_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/volume"
-        android:layout_gravity="center_vertical"/>
-    <LinearLayout
+        android:layout_marginEnd="15dp"
         android:layout_marginStart="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_centerVertical="true"/>
+
     <TextView
         android:id="@+id/tienganh_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image_voice"
         android:text="@string/tieng_anh"
-        android:textSize="16dp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:textSize="16dp" />
     <TextView
         android:id="@+id/tiengviet_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tieng_viet"
         android:textSize="12dp"
-        android:textColor="@color/grey_500"
-        android:layout_gravity="center_horizontal"/>
-</LinearLayout>
-    <LinearLayout
+        android:layout_below="@+id/tienganh_item"
+        android:layout_alignLeft="@id/tienganh_item"
+        android:textColor="@color/grey_500" />
+
+    <TextView
+        android:id="@+id/textView_ngayon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="230dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ôn tập lại sau"
-            android:textSize="8dp"
-            android:textColor="@color/grey_500"/>
-        <TextView
-            android:id="@+id/ngayontap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1 ngày"
-            android:layout_gravity="center_horizontal"
-            android:textSize="13dp"
-            android:textColor="@color/black"/>
+        android:layout_alignParentEnd="true"
+        android:text="Ôn tập lại sau"
+        android:textColor="@color/grey_500"
+        android:textSize="8dp"
+        android:layout_marginEnd="15dp"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/ngayontap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 ngày"
+        android:textSize="13dp"
+        android:layout_alignLeft="@id/textView_ngayon"
+        android:layout_below="@id/textView_ngayon"
 
-</LinearLayout>
+        android:textColor="@color/black"/>
+
+
+
+</RelativeLayout>

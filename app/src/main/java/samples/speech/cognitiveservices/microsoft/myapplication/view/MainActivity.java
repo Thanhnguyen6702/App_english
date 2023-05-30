@@ -10,19 +10,20 @@ import androidx.navigation.Navigation;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.databinding.ActivityMainBinding;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
-import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_dahoc;
+import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_revise;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding mainBinding;
     private ShareViewModel data_login;
-    private Share_dahoc data_dahoc;
+    private Share_revise data_revise;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         data_login = new ViewModelProvider(this).get(ShareViewModel.class);
-        data_dahoc = new ViewModelProvider(this).get(Share_dahoc.class);
+        data_revise = new ViewModelProvider(this).get(Share_revise.class);
         mainBinding.navBottom.setOnItemSelectedListener(item -> {
             int i = item.getItemId();
             NavController navController = Navigation.findNavController(MainActivity.this, R.id.fragmentContainerView);
@@ -32,19 +33,20 @@ public class MainActivity extends AppCompatActivity {
             } else if (i == R.id.action_collection) {
                 navController.navigate(R.id.action_activitymain_to_fragment_list);
                 return true;
-            } else if(i ==R.id.action_favorite){
-                navController.navigate(R.id.action_activitymain_to_fragment_favorite);
+            } else if (i == R.id.action_voice) {
+                navController.navigate(R.id.action_activitymain_to_fragment_voice);
                 return true;
-            }
-            else return true;
+            } else return true;
 
 
         });
     }
-    public ShareViewModel getData_login(){
+
+    public ShareViewModel getData_login() {
         return data_login;
     }
-    public Share_dahoc getData_dahoc(){
-        return data_dahoc;
+
+    public Share_revise getData_revise() {
+        return data_revise;
     }
 }
