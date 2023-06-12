@@ -106,12 +106,13 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/voice_study"
-        android:layout_width="46dp"
-        android:layout_height="48dp"
+    <Button
+        android:id="@+id/button_next"
+        android:text="next"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
         android:layout_marginTop="508dp"
-        android:background="@drawable/mic"
+        android:background="@drawable/button_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

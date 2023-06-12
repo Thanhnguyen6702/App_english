@@ -6,6 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="black_100">#4A4A4A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#FFBCB9B9</color>
     <color name="green_button_background">#CFF8CF</color>
@@ -15,6 +16,12 @@
     <color name="grey_100">#EFE8E8</color>
     <color name="grey_500">#686868</color>
     <color name="green">#4CAF50</color>
+    <color name="green_50">#E1F8C7</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="orange">#FFC107</color>
     <color name="red">#F44336</color>
+    <color name="red_50">#F8C4C4</color>
+    <color name="red_100">#F84B4B</color>
+    <color name="yellow_50">#F3ECAF</color>
+    <color name="white_100">#F1EAEA</color>
 </resources>

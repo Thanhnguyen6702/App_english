@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -76,6 +77,7 @@ public class Fragment_home extends Fragment {
             NavController navController = Navigation.findNavController(fragmentHomeBinding.getRoot());
             navController.navigate(R.id.action_fragment_home_to_fragment_topic);
             bottomNavigationView.setVisibility(View.GONE);
+            shareViewModel.setNav(R.id.action_fragment_topic_to_fragment_home);
         });
         fragmentHomeBinding.buttonLearn.setOnClickListener(view -> {
             NavController navController = Navigation.findNavController(fragmentHomeBinding.getRoot());
@@ -115,15 +117,25 @@ public class Fragment_home extends Fragment {
             public void onComplete() {
                 chua_hoc.setList_topic(topicList);
                 for (int i = 0; i < topicList.size(); i++) {
-                    if (chua_hoc.gettopic().getValue() != null) {
-                        getChuahoc(account, chua_hoc.gettopic().getValue());
-                        fragmentHomeBinding.topic.setText(chua_hoc.gettopic().getValue());
-                        break;
-                    }
-                    if (Integer.parseInt(topicList.get(i).getSotu()) > 0) {
-                        getChuahoc(account, topicList.get(i).getTopic());
-                        fragmentHomeBinding.topic.setText(topicList.get(i).getTopic());
-                        break;
+                    for (int j = 0; j < topicList.get(i).getChildtopic().size(); j++) {
+                        if (chua_hoc.gettopic().getValue() != null) {
+                            getChuahoc(account, chua_hoc.gettopic().getValue().get(0));
+                            fragmentHomeBinding.topic.setText(chua_hoc.gettopic().getValue().get(0));
+                            Glide.with(fragmentHomeBinding.getRoot())
+                                    .load(chua_hoc.gettopic().getValue().get(1))
+                                    .into(fragmentHomeBinding.imageviewHome);
+                            i=topicList.size();
+                            break;
+                        }
+                        if (Integer.parseInt(topicList.get(i).getChildtopic().get(j).getSotu()) > 0) {
+                            getChuahoc(account, topicList.get(i).getChildtopic().get(j).getChildtopic());
+                            fragmentHomeBinding.topic.setText(topicList.get(i).getChildtopic().get(j).getChildtopic());
+                            Glide.with(fragmentHomeBinding.getRoot())
+                                    .load(topicList.get(i).getChildtopic().get(j).getImage())
+                                    .into(fragmentHomeBinding.imageviewHome);
+                            i=topicList.size();
+                            break;
+                        }
                     }
                 }
             }

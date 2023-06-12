@@ -1,22 +1,63 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.CallAPI;
 
+import java.util.List;
+
 public class Topic {
-    private String Topic;
-    private String sotu;
+    String topic;
+    List<Subtopic> childtopic;
 
     public String getTopic() {
-        return Topic;
+        return topic;
     }
 
     public void setTopic(String topic) {
-        Topic = topic;
+        this.topic = topic;
     }
 
-    public String getSotu() {
-        return sotu;
+    public List<Subtopic> getChildtopic() {
+        return childtopic;
     }
 
-    public void setSotu(String sotu) {
-        this.sotu = sotu;
+    public void setChildtopic(List<Subtopic> childtopic) {
+        this.childtopic = childtopic;
+    }
+    public class Subtopic {
+        String childtopic;
+        String image;
+        String sotu;
+        String sotu_chuahoc;
+
+        public String getSotu_chuahoc() {
+            return sotu_chuahoc;
+        }
+
+        public void setSotu_chuahoc(String sotu_chuahoc) {
+            this.sotu_chuahoc = sotu_chuahoc;
+        }
+
+        public String getChildtopic() {
+            return childtopic;
+        }
+
+        public void setChildtopic(String childtopic) {
+            this.childtopic = childtopic;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getSotu() {
+            return sotu;
+        }
+
+        public void setSotu(String sotu) {
+            this.sotu = sotu;
+        }
     }
 }
+

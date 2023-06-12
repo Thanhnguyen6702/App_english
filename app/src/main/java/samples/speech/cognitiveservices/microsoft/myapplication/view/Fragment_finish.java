@@ -55,6 +55,7 @@ public class Fragment_finish extends Fragment {
         close.setOnClickListener(view1->{
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_fragment_finish_to_fragment_home);
+            share_revise.setValue_resive(null);
         });
         return view;
     }

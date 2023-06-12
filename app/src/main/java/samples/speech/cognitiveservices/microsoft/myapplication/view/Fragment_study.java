@@ -2,7 +2,6 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +60,11 @@ public class Fragment_study extends Fragment {
         start = random.nextInt(1000) % check;
         fragmentStudyBinding.textQuestionStudy.setText(chua_hoc.get(0).getTienganh());
         fragmentStudyBinding.phienam.setText(chua_hoc.get(0).getPhienam());
+        int sotu=0;
+        if (share_revise.getValue_resive().getValue() != null) {
+            sotu = share_revise.getValue_resive().getValue().size()+1;
+        }
+        fragmentStudyBinding.socauStudy.setText(sotu + "/" + (chua_hoc.size()+sotu));
         arrayAnswer[0] = chua_hoc.get(0).getTiengviet();
         for (int i = 1; i <= 3; i++) {
             if (arrayAnswer[0].equals(listvalue.get(start).getTiengviet())) {
@@ -139,10 +143,9 @@ public class Fragment_study extends Fragment {
     }
 
     public void next() {
+        chua_hoc.get(0).setCheckday("1");
+        reviseList.add(chua_hoc.get(0));
         handler.postDelayed(() -> {
-            chua_hoc.get(0).setCheckday("1");
-
-            reviseList.add(chua_hoc.get(0));
             NavController navController = Navigation.findNavController(fragmentStudyBinding.getRoot());
             navController.navigate(R.id.action_fragment_study_to_fragment_study2);
         }, 750);

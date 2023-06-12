@@ -3,6 +3,8 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -26,6 +28,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -45,17 +49,27 @@ import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareV
 public class Fragment_login extends Fragment {
     FragmentLoginBinding fragmentLoginBinding;
     ShareViewModel data_login;
-
+    Dialog dialog;
+    int check=0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false);
         Fragment_login_ViewModel fragment_login_viewModel = new Fragment_login_ViewModel();
         fragmentLoginBinding.setFragmentLoginViewModel(fragment_login_viewModel);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
+        bottomNavigationView.setVisibility(View.GONE);
         data_login = ((MainActivity) requireActivity()).getData_login();
-        SharedPreferences.Editor editor = requireContext().getSharedPreferences("user",Context.MODE_PRIVATE).edit();
-        Dialog dialog = new Dialog(requireContext());
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(sharedPreferences.getString("account","").equals("") && sharedPreferences.getString("password","").equals("")){
+            fragmentLoginBinding.taikhoan.setText(sharedPreferences.getString("account",""));
+            fragmentLoginBinding.matkhau.setText(sharedPreferences.getString("password",""));
+            fragmentLoginBinding.buttonLogin.performClick();
+        }
+        dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.dialog_login);
         fragmentLoginBinding.buttonLogin.setOnClickListener(view1 -> ApiService.apiService.login(fragmentLoginBinding.taikhoan.getText().toString(), fragmentLoginBinding.matkhau.getText().toString()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
             @Override
@@ -70,13 +84,13 @@ public class Fragment_login extends Fragment {
                 try {
                     if (s.string().equals("success")) {
                         editor.putString("account",fragmentLoginBinding.taikhoan.getText().toString());
+                        editor.putString("password",fragmentLoginBinding.taikhoan.getText().toString());
                         editor.apply();
                         data_login.setData(fragmentLoginBinding.taikhoan.getText().toString());
                         NavController navController = Navigation.findNavController(fragmentLoginBinding.getRoot());
                         navController.navigate(R.id.action_fragment_login_to_fragment_home);
                         navController.popBackStack(R.id.fragment_login, true);
                         get_data();
-                        get_listvalue();
                     } else {
                         fragmentLoginBinding.taikhoan.setError("Tài khoản hoặc mật khẩu không chính xác");
                         fragmentLoginBinding.matkhau.setError("Tài khoản hoặc mật khẩu không chính xác");
@@ -96,7 +110,7 @@ public class Fragment_login extends Fragment {
 
             @Override
             public void onComplete() {
-                dialog.dismiss();
+
             }
         }));
         TextWatcher textWatcher = new TextWatcher() {
@@ -173,12 +187,14 @@ public class Fragment_login extends Fragment {
 
             @Override
             public void onComplete() {
+                check++;
+                if(check==2){
+                    dialog.dismiss();
+                }
 
             }
         });
-    }
 
-    public void get_listvalue() {
         ApiService.apiService.getListValue(fragmentLoginBinding.taikhoan.getText().toString()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Value>>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
@@ -197,9 +213,13 @@ public class Fragment_login extends Fragment {
 
             @Override
             public void onComplete() {
-
+                check++;
+                if(check==2){
+                    dialog.dismiss();
+                }
             }
         });
     }
 
 }
+

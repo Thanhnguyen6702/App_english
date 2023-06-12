@@ -64,4 +64,6 @@ public interface ApiService {
     Observable<Definition> getDefinition(@Query("word") String word);
     @GET("thanh/examples.php")
     Observable<Example> getExample(@Query("word") String word);
+    @GET("thanh/topicphatam.php")
+    Observable<List<Topicphatam>> getTopicphatam(@Query("account") String account);
 }

@@ -6,6 +6,8 @@ import static android.Manifest.permission.RECORD_AUDIO;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -21,7 +23,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.cognitiveservices.speech.KeywordRecognitionModel;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentConfig;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentGradingSystem;
@@ -68,7 +72,7 @@ import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareV
 
 public class Fragment_pron extends Fragment {
     View view;
-    ImageView mic, volume, next;
+    ImageView mic, volume, next, close;
     TextView tienganh, phienam, tiengviet, textboy;
     //Voice_to_text voice_to_text = new Voice_to_text();
     Text_to_voice text_to_voice = new Text_to_voice();
@@ -76,7 +80,6 @@ public class Fragment_pron extends Fragment {
     List<Vocabulary> vocabularies = new ArrayList<>();
     String Text, tieng_anh;
     int start = 0;
-    long time_start = System.currentTimeMillis();
     SpeechConfig speechConfig;
     KeywordRecognitionModel kwsModel;
     private MicrophoneStream microphoneStream;
@@ -104,6 +107,13 @@ public class Fragment_pron extends Fragment {
         kwsModel = KeywordRecognitionModel.fromFile(copyAssetToCacheAndGetFilePath(Key_API.KwsModelFile));
         mic = view.findViewById(R.id.mic_assess);
         next = view.findViewById(R.id.next_pron);
+        close = view.findViewById(R.id.close_pronun);
+        close.setOnClickListener(view1 -> {
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_fragment_voice_to_framgent_phatam);
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        });
         next.setVisibility(View.GONE);
         volume = view.findViewById(R.id.volume_assess);
         tienganh = view.findViewById(R.id.tienganh_assess);
@@ -112,22 +122,17 @@ public class Fragment_pron extends Fragment {
         textboy = view.findViewById(R.id.textBoy);
         batdau();
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
-        shareViewModel.getChuahoc().observe(getViewLifecycleOwner(), listVovab -> {
-            Dialog dialog = new Dialog(requireContext());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.dialog_load_list);
-            if (listVovab.isEmpty()) {
-                dialog.show();
-            } else {
-                dialog.dismiss();
-                vocabularies = listVovab;
-                tienganh.setText(listVovab.get(start).getTienganh());
-                tiengviet.setText(listVovab.get(start).getTiengviet());
-                phienam.setText(listVovab.get(start).getPhienam());
-                Text = tienganh.getText().toString();
-                tieng_anh = tienganh.getText().toString();
-                getExample(Text);
-            }
+        if (shareViewModel.getchuahoc_phatam().getValue() == null || shareViewModel.getchuahoc_phatam().getValue().isEmpty()) {
+            getData(shareViewModel.getData().getValue(), shareViewModel.getTopicphatam().getValue());
+        }
+        shareViewModel.getchuahoc_phatam().observe(getViewLifecycleOwner(), listVovab -> {
+            tienganh.setText(listVovab.get(start).getTienganh());
+            tiengviet.setText(listVovab.get(start).getTiengviet());
+            phienam.setText(listVovab.get(start).getPhienam());
+            Text = tienganh.getText().toString();
+            tieng_anh = tienganh.getText().toString();
+            getExample(Text);
+
         });
         try {
             // a unique number within the application to allow
@@ -140,35 +145,6 @@ public class Fragment_pron extends Fragment {
         }
 
 
-/*        voice.setOnClickListener(view -> {
-            clearTextBox();
-
-            try {
-                // In general, if the device default microphone is used then it is enough
-                // to either have AudioConfig.fromDefaultMicrophoneInput or omit the audio
-                // config altogether.
-                // AudioConfig.fromStreamInput is specifically needed if you want to use an
-                // external microphone (including Bluetooth that couldn't be otherwise used)
-                // or mix audio from some other source to microphone audio.
-                final AudioConfig audioInput = AudioConfig.fromStreamInput(voice_to_text.createMicrophoneStream());
-                final SpeechRecognizer reco = new SpeechRecognizer(speechConfig, audioInput);
-
-                final Future<SpeechRecognitionResult> task = reco.recognizeOnceAsync();
-                setOnTaskCompletedListener(task, result -> {
-                    String s = result.getText();
-                    if (result.getReason() != ResultReason.RecognizedSpeech) {
-                        String errorDetails = (result.getReason() == ResultReason.Canceled) ? CancellationDetails.fromResult(result).getErrorDetails() : "";
-                        s = "Recognition failed with " + result.getReason() + ". Did you enter your subscription?" + System.lineSeparator() + errorDetails;
-                    }
-
-                    reco.close();
-                    setRecognizedText(s);
-                });
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-                displayException(ex);
-            }
-        });*/
         volume.setOnClickListener(view1 -> text_to_voice.voice(tienganh.getText().toString()));
         next.setOnClickListener(view1 -> {
             start++;
@@ -195,23 +171,13 @@ public class Fragment_pron extends Fragment {
         ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(@NonNull Network network) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        record();
-                    }
-                });
+                getActivity().runOnUiThread(() -> record());
             }
 
             @Override
             public void onLost(@NonNull Network network) {
                 if (!isconnect) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            stoprecord();
-                        }
-                    });
+                    getActivity().runOnUiThread(() -> stoprecord());
 
                     Toast.makeText(getContext(), "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
                 }
@@ -319,8 +285,8 @@ public class Fragment_pron extends Fragment {
     }
 
     public void record() {
-            Handler handler = new Handler();
-            Runnable runnable = () -> mic.performClick();
+        Handler handler = new Handler();
+        Runnable runnable = () -> mic.performClick();
         if (this.microphoneStream != null) {
             nghexong();
             handler.removeCallbacks(runnable);
@@ -342,14 +308,14 @@ public class Fragment_pron extends Fragment {
                     AudioProcessingConstants.AUDIO_INPUT_PROCESSING_DISABLE_ECHO_CANCELLATION |
                             AudioProcessingConstants.AUDIO_INPUT_PROCESSING_DISABLE_NOISE_SUPPRESSION
             );
-            AudioConfig audioConfig = AudioConfig.fromStreamInput(createMicrophoneStream(),audioProcessingOptions);
-            audioConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs, "1000");
-            audioConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs,"2000");
+            AudioConfig audioConfig = AudioConfig.fromStreamInput(createMicrophoneStream(), audioProcessingOptions);
+            audioConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs, "1500");
+            audioConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs, "2000");
             final SpeechRecognizer reco = new SpeechRecognizer(speechConfig, audioConfig);
             // Replace this referenceText to match your input.
             String referenceText = tienganh.getText().toString().trim();
             int count = countText(tienganh.getText().toString());
-            handler.postDelayed(runnable,2000+count* 1000L);
+            handler.postDelayed(runnable, 2000 + count * 1000L);
             PronunciationAssessmentConfig pronConfig =
                     new PronunciationAssessmentConfig(referenceText,
                             PronunciationAssessmentGradingSystem.HundredMark,
@@ -360,44 +326,30 @@ public class Fragment_pron extends Fragment {
                 PronunciationAssessmentResult pronResult = PronunciationAssessmentResult.fromResult(speechRecognitionResultEventArgs.getResult());
                 SpannableStringBuilder spannableString = new SpannableStringBuilder();
                 double score_tienganh = 0;
-                if(pronResult!=null) {
-                    Log.e("loi",pronResult.getWords().get(0).getWord()+pronResult.getWords().get(0).getAccuracyScore());
+                if (pronResult != null) {
                     for (int i = 0; i < count; i++) {
                         double score = pronResult.getWords().get(i).getAccuracyScore();
                         if (tieng_anh.equalsIgnoreCase(pronResult.getWords().get(i).getWord())) {
-                            if (start % 2 == 1)
-                                score_tienganh = pronResult.getWords().get(i).getAccuracyScore();
-                            else score_tienganh = pronResult.getPronunciationScore();
+                            score_tienganh = pronResult.getWords().get(i).getAccuracyScore();
                         }
                         if (score >= 75) {
-                            Log.e("loi","1");
                             spannableString = concatText(spannableString, paintText(pronResult.getWords().get(i).getWord(), ContextCompat.getColor(requireContext(), R.color.green)));
-                        } else if (score >= 30) {                            Log.e("loi","2");
+                        } else if (score >= 30) {
 
                             spannableString = concatText(spannableString, paintText(pronResult.getWords().get(i).getWord(), ContextCompat.getColor(requireContext(), R.color.yellow)));
-                        } else {                            Log.e("loi","3");
+                        } else {
 
                             spannableString = concatText(spannableString, paintText(pronResult.getWords().get(i).getWord(), ContextCompat.getColor(requireContext(), R.color.red)));
                         }
                     }
                     SpannableStringBuilder finalSpannableString = spannableString;
-                    Log.e("loi",spannableString.toString()+"\n");
-                    ForegroundColorSpan[] colorSpans = finalSpannableString.getSpans(0, finalSpannableString.length(), ForegroundColorSpan.class);
-                    for (ForegroundColorSpan colorSpan : colorSpans) {
-                        int start = finalSpannableString.getSpanStart(colorSpan);
-                        int end = finalSpannableString.getSpanEnd(colorSpan);
-                        int color = colorSpan.getForegroundColor();
-
-                        // In định dạng màu của phần văn bản từ start đến end
-                        Log.e("Màu chữ", "Màu chữ từ " + start + " đến " + end + ": " + color);
-                    }
                     double score_tienganh1 = score_tienganh;
                     getActivity().runOnUiThread(() -> {
                         ketqua(score_tienganh1);
                         // this.mic.setImageResource(R.drawable.mic);
                         tienganh.setText(finalSpannableString);
                     });
-                }else{
+                } else {
                     textboy.setText("Vui lòng phát âm lại!");
                 }
 
@@ -427,4 +379,35 @@ public class Fragment_pron extends Fragment {
             this.releaseMicrophoneStream();
         }
     }
+
+    public void getData(String account, String topic) {
+        Dialog dialog = new Dialog(requireContext());
+        ApiService.apiService.getStudy_topic(account, topic).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Vocabulary>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.dialog_login);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+            }
+
+            @Override
+            public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<Vocabulary> vocabularies1) {
+                vocabularies = vocabularies1;
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                shareViewModel.setShare_chuahoc_phatam(vocabularies);
+                dialog.dismiss();
+            }
+        });
+    }
+
+
 }

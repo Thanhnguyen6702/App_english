@@ -1,12 +1,12 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,9 +31,9 @@ public class Fragment_study2 extends Fragment {
     ShareViewModel shareViewModel;
     Share_revise share_revise;
     TextView text_example, tienganh, tiengviet, phienam, category, tienganh_overleaf, define;
-    ImageView voice;
+    Button buttonNext;
     int start = 0;
-    int end=-1;
+    int end = -1;
     List<Prep> preps = new ArrayList<>();
 
     @Nullable
@@ -46,7 +46,7 @@ public class Fragment_study2 extends Fragment {
         linearLayout1 = view.findViewById(R.id.linearLayout1);
         linearLayout2 = view.findViewById(R.id.linearLayout2);
         linearLayout1.setEnabled(false);
-        voice = view.findViewById(R.id.voice_study);
+        buttonNext = view.findViewById(R.id.button_next);
         tienganh = linearLayout1.findViewById(R.id.Tienganh_study);
         tiengviet = linearLayout1.findViewById(R.id.tiengviet_study);
         phienam = linearLayout1.findViewById(R.id.phienam_2);
@@ -55,8 +55,8 @@ public class Fragment_study2 extends Fragment {
         define = linearLayout2.findViewById(R.id.definition);
         tienganh_overleaf = linearLayout2.findViewById(R.id.Tienganh_study_overleaf);
         share_revise.getExample().observe(getViewLifecycleOwner(), example -> {
-            if (example.getExample()!=null) {
-                text_example.setText("Eg: "+example.getExample().get(0));
+            if (example.getExample() != null) {
+                text_example.setText("Eg: " + example.getExample().get(0));
             }
         });
         share_revise.getDefinition().observe(getViewLifecycleOwner(), definition1 -> {
@@ -76,7 +76,7 @@ public class Fragment_study2 extends Fragment {
         tiengviet.setText(chuahoc.get(0).getTiengviet());
         tienganh.setText(chuahoc.get(0).getTienganh());
         phienam.setText(chuahoc.get(0).getPhienam());
-        voice.setOnClickListener(view1 -> {
+        buttonNext.setOnClickListener(view1 -> {
             chuahoc.remove(0);
             shareViewModel.setShare_chuahoc(chuahoc);
             NavController navController = Navigation.findNavController(view);

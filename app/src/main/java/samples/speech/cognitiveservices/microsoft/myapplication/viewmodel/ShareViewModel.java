@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Detail_info;
+import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Topic;
+import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Topicphatam;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Value;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
 
@@ -16,6 +18,41 @@ public class ShareViewModel extends ViewModel {
     private final MutableLiveData<List<Value>> share_listValue = new MutableLiveData<>();
     private  final  MutableLiveData<List<Vocabulary>> share_chuahoc = new MutableLiveData<>();
     private final MutableLiveData<List<Vocabulary>> share_phatam = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> share_sotuphatam = new MutableLiveData<>();
+    private final MutableLiveData<Integer> nav = new MutableLiveData<>();
+    private final MutableLiveData<List<Vocabulary>> share_chuahoc_phatam = new MutableLiveData<>();
+    private final MutableLiveData<String> topic_phatam = new MutableLiveData<>();
+    private final MutableLiveData<List<Topicphatam>> share_listTopicphatam = new MutableLiveData<>();
+    public void setShare_listTopicphatam(List<Topicphatam> topicphatam){
+        share_listTopicphatam.setValue(topicphatam);
+    };
+    public LiveData<List<Topicphatam>> getListtopicphatam(){
+        return share_listTopicphatam;
+    }
+    public void setTopic_phatam(String topic_phatam){
+        this.topic_phatam.setValue(topic_phatam);
+    }
+    public LiveData<String> getTopicphatam(){
+        return topic_phatam;
+    }
+    public void setShare_chuahoc_phatam(List<Vocabulary> chuahoc_phatam){
+        share_chuahoc_phatam.setValue(chuahoc_phatam);
+    }
+    public LiveData<List<Vocabulary>> getchuahoc_phatam(){
+        return share_chuahoc_phatam;
+    }
+    public void setNav(Integer id){
+        nav.setValue(id);
+    }
+    public LiveData<Integer> getNav(){
+        return nav;
+    }
+    public void setShare_sotuphatam(List<String> sotuphatam){
+        share_sotuphatam.setValue(sotuphatam);
+    }
+    public LiveData<List<String>> getSotuphatam(){
+        return share_sotuphatam;
+    }
     public void setShare_chuahoc(List<Vocabulary> vocabulary){
         share_chuahoc.setValue(vocabulary);
     }

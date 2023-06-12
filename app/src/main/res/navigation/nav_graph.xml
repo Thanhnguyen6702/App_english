@@ -59,14 +59,21 @@
     <action
         android:id="@+id/action_activitymain_to_fragment_list"
         app:destination="@+id/fragment_list"/>
+    <action
+        android:id="@+id/action_activitymain_to_fragment_logout"
+        app:destination="@id/fragment_logout"/>
     <fragment
         android:id="@+id/fragment_voice"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_pron"
         android:label="Fragment_favorite"
-        tools:layout="@layout/fragment_pron"/>
+        tools:layout="@layout/fragment_pron">
+        <action
+            android:id="@+id/action_fragment_voice_to_framgent_phatam"
+            app:destination="@id/fragment_phatam" />
+    </fragment>
     <action
-        android:id="@+id/action_activitymain_to_fragment_voice"
-        app:destination="@id/fragment_voice" />
+        android:id="@+id/action_activitymain_to_fragment_phatam"
+        app:destination="@id/fragment_phatam" />
     <fragment
         android:id="@+id/fragment_learn"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_learn"
@@ -114,5 +121,30 @@
         android:id="@+id/fragment_topic"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_topic"
         android:label="Fragment_topic"
-        tools:layout="@layout/fragment_topic"/>
+        tools:layout="@layout/fragment_topic">
+        <action
+            android:id="@+id/action_fragment_topic_to_fragment_voice"
+            app:destination="@id/fragment_voice" />
+        <action
+            android:id="@+id/action_fragment_topic_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_phatam"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Framgent_phatam"
+        android:label="Framgent_phatam"
+        tools:layout="@layout/topic_pronun">
+        <action
+            android:id="@+id/action_framgent_phatam_to_fragment_topic"
+            app:destination="@id/fragment_topic" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_logout"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_logout"
+        android:label="Fragment_logout"
+        tools:layout="@layout/fragment_logout">
+        <action
+            android:id="@+id/action_fragment_logout_to_fragment_login"
+            app:destination="@id/fragment_login" />
+    </fragment>
 </navigation>

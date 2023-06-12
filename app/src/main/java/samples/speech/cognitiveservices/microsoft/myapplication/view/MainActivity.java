@@ -27,18 +27,29 @@ public class MainActivity extends AppCompatActivity {
         mainBinding.navBottom.setOnItemSelectedListener(item -> {
             int i = item.getItemId();
             NavController navController = Navigation.findNavController(MainActivity.this, R.id.fragmentContainerView);
+            int currentDestinationId = navController.getCurrentDestination().getId();
+
             if (i == R.id.action_home) {
-                navController.navigate(R.id.action_activitymain_to_fragment_home);
+                if (currentDestinationId != R.id.fragment_home) {
+                    navController.navigate(R.id.action_activitymain_to_fragment_home);
+                }
                 return true;
             } else if (i == R.id.action_collection) {
-                navController.navigate(R.id.action_activitymain_to_fragment_list);
+                if (currentDestinationId != R.id.fragment_list) {
+                    navController.navigate(R.id.action_activitymain_to_fragment_list);
+                }
                 return true;
             } else if (i == R.id.action_voice) {
-                navController.navigate(R.id.action_activitymain_to_fragment_voice);
+                if (currentDestinationId != R.id.fragment_phatam) {
+                    navController.navigate(R.id.action_activitymain_to_fragment_phatam);
+                }
                 return true;
-            } else return true;
-
-
+            } else {
+                if (currentDestinationId != R.id.fragment_logout) {
+                    navController.navigate(R.id.action_activitymain_to_fragment_logout);
+                }
+                return true;
+            }
         });
     }
 
@@ -48,5 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
     public Share_revise getData_revise() {
         return data_revise;
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

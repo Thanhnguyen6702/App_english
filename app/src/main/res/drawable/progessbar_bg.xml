@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tầng 1: Phần trăm hiện tại -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/grey_100" />
+            <corners android:radius="30dp"/>
+        </shape>
+    </item>
+
+    <!-- Tầng 2: Phần trăm tiến trình -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="@color/green" />
+                <corners android:radius="30dp"/>
+            </shape>
+        </clip>
+    </item>
+</layer-list>

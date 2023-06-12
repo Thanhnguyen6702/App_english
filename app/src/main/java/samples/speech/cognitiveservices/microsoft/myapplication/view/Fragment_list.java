@@ -2,7 +2,6 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,7 @@ public class Fragment_list extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rcvData = fragmentListBinding.rcvValue;
         rcvData.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         rcvData.addItemDecoration(dividerItemDecoration);
         ApiService.apiService.getListValue(account).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Value>>() {
             @Override
@@ -63,7 +62,6 @@ public class Fragment_list extends Fragment {
 
             @Override
             public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                Log.e("loi",e.toString());
             }
 
             @Override

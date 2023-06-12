@@ -14,7 +14,7 @@ import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Value;
 public class Share_revise extends ViewModel {
     MutableLiveData<List<Value>> value_resive = new MutableLiveData<>();
     MutableLiveData<List<Topic>> list_topic = new MutableLiveData<>();
-    MutableLiveData<String> topic = new MutableLiveData<>();
+    MutableLiveData<List<String>> topic = new MutableLiveData<>();
     MutableLiveData<Example> example = new MutableLiveData<>();
     MutableLiveData<Definition> definition = new MutableLiveData<>();
 
@@ -34,11 +34,11 @@ public class Share_revise extends ViewModel {
         return definition;
     }
 
-    public void setTopic(String topic) {
+    public void setTopic(List<String> topic) {
         this.topic.setValue(topic);
     }
 
-    public LiveData<String> gettopic() {
+    public LiveData<List<String>> gettopic() {
         return topic;
     }
 

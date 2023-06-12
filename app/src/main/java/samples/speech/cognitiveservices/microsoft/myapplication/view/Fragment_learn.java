@@ -144,6 +144,8 @@ public class Fragment_learn extends Fragment {
 
     public void next(int k) {
         iscorrect = false;
+        int socau = k+1;
+        fragmentLearnBinding.socau.setText(k+"/"+hoc.size());
         if(k>0) {
             handler.postDelayed(() -> {
                 enableImageview();

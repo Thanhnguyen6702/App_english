@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="120dp"
+    android:background="@drawable/background_item_topic"
+    android:layout_margin="20dp">
+<TextView
+    android:id="@+id/name_topic"
+    android:paddingStart="15dp"
+    android:paddingTop="15dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="tên chủ đề"
+    android:textSize="15dp"
+    android:textColor="@color/black"
+    android:layout_marginStart="5dp"/>
+    <ProgressBar
+        android:id="@+id/percent_learn"
+        android:layout_width="60dp"
+        android:layout_height="10dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="15dp"
+        android:progressDrawable="@drawable/progessbar_bg"
+        android:progress="30"
+        android:indeterminateOnly="false"/>
+    <TextView
+        android:id="@+id/sotu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 từ"
+        android:textSize="15dp"
+        android:textColor="@color/grey"
+        android:layout_marginBottom="4dp"
+        android:layout_above="@+id/percent_learn"
+        android:layout_alignStart="@+id/percent_learn"/>
+    <ImageView
+        android:id="@+id/image_topic"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

@@ -129,11 +129,9 @@ public class Fragment_signup extends Fragment {
                 try {
                     String response = responseBody.string();
                     if (response.trim().equals("success")) {
-                        Log.e("loi",response);
                         backLogin();
                         Toast.makeText(getContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.e("loi1",response);
                         fragmentSignupBinding.taikhoanDk.setError("Tài khoản đã tồn tại");
                     }
                 } catch (IOException e) {
