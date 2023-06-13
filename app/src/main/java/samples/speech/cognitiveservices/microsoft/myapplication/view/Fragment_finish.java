@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +37,6 @@ public class Fragment_finish extends Fragment {
     List<Value> value_reviseList;
     Share_revise share_revise;
     ShareViewModel shareViewModel;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class Fragment_finish extends Fragment {
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
         get_data();
         value_reviseList = share_revise.getValue_resive().getValue();
+        TextView tuhoanthanh = view.findViewById(R.id.textView_finish1);
+        tuhoanthanh.setText("Chúc mừng bạn vừa hoàn thành thêm được "+value_reviseList.size()+" từ mới");
         finish_adapter = new Finish_Adapter(value_reviseList);
         recyclerView.setAdapter(finish_adapter);
         ImageView close = view.findViewById(R.id.close_finish);

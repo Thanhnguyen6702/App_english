@@ -27,7 +27,7 @@ import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Topicpha
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 
-public class Framgent_phatam extends Fragment {
+public class Framgent_phatam extends Fragment  {
     View view;
     TextView sotudahoc;
     Button buttonhoc, buttonthap, buttontrungbinh, buttonxuatsac;
@@ -94,4 +94,5 @@ public class Framgent_phatam extends Fragment {
             }
         });
     }
+
 }

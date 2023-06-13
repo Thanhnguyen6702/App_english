@@ -109,10 +109,7 @@ public class Fragment_pron extends Fragment {
         next = view.findViewById(R.id.next_pron);
         close = view.findViewById(R.id.close_pronun);
         close.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_voice_to_framgent_phatam);
-            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
-            bottomNavigationView.setVisibility(View.VISIBLE);
+           close_fragment();
         });
         next.setVisibility(View.GONE);
         volume = view.findViewById(R.id.volume_assess);
@@ -122,9 +119,7 @@ public class Fragment_pron extends Fragment {
         textboy = view.findViewById(R.id.textBoy);
         batdau();
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
-        if (shareViewModel.getchuahoc_phatam().getValue() == null || shareViewModel.getchuahoc_phatam().getValue().isEmpty()) {
             getData(shareViewModel.getData().getValue(), shareViewModel.getTopicphatam().getValue());
-        }
         shareViewModel.getchuahoc_phatam().observe(getViewLifecycleOwner(), listVovab -> {
             tienganh.setText(listVovab.get(start).getTienganh());
             tiengviet.setText(listVovab.get(start).getTiengviet());
@@ -150,6 +145,10 @@ public class Fragment_pron extends Fragment {
             start++;
             batdau();
             next.setVisibility(View.GONE);
+            if(start>vocabularies.size()*2){
+                close_fragment();
+                Toast.makeText(requireContext(),"Bạn đã hoàn thành xong chủ đề này!",Toast.LENGTH_SHORT).show();
+            }
             if (start % 2 == 0) {
                 tienganh.setText(vocabularies.get(start / 2).getTienganh());
                 tiengviet.setText(vocabularies.get(start / 2).getTiengviet());
@@ -216,7 +215,12 @@ public class Fragment_pron extends Fragment {
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Example example) {
-                Text = example.getExample().get(0);
+                if(example.getExample()!=null && !example.getExample().isEmpty()) {
+                    Text = example.getExample().get(0);
+                }
+                else{
+                    start++;
+                }
             }
 
             @Override
@@ -329,6 +333,9 @@ public class Fragment_pron extends Fragment {
                 if (pronResult != null) {
                     for (int i = 0; i < count; i++) {
                         double score = pronResult.getWords().get(i).getAccuracyScore();
+                        if(start%2==1 && count>1){
+                            score_tienganh = pronResult.getPronunciationScore();
+                        }
                         if (tieng_anh.equalsIgnoreCase(pronResult.getWords().get(i).getWord())) {
                             score_tienganh = pronResult.getWords().get(i).getAccuracyScore();
                         }
@@ -348,6 +355,7 @@ public class Fragment_pron extends Fragment {
                         ketqua(score_tienganh1);
                         // this.mic.setImageResource(R.drawable.mic);
                         tienganh.setText(finalSpannableString);
+                        postScore(shareViewModel.getData().getValue(),tieng_anh,(int) score_tienganh1);
                     });
                 } else {
                     textboy.setText("Vui lòng phát âm lại!");
@@ -382,7 +390,7 @@ public class Fragment_pron extends Fragment {
 
     public void getData(String account, String topic) {
         Dialog dialog = new Dialog(requireContext());
-        ApiService.apiService.getStudy_topic(account, topic).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Vocabulary>>() {
+        ApiService.apiService.getStudy_topic_phatam(account, topic).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Vocabulary>>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -408,6 +416,34 @@ public class Fragment_pron extends Fragment {
             }
         });
     }
+            public void postScore(String account,String word,int score){
+                    ApiService.apiService.postScore(account,word,score).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Void>() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
+                        }
 
+                        @Override
+                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull Void unused) {
+
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+            }
+        public void close_fragment(){
+            shareViewModel.setShare_sotuphatam(null);
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_fragment_voice_to_framgent_phatam);
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
 }

@@ -17,8 +17,4 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="Circular_progressBar">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/circle</item>
-    </style>
 </resources>

@@ -49,8 +49,10 @@ import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareV
 public class Fragment_login extends Fragment {
     FragmentLoginBinding fragmentLoginBinding;
     ShareViewModel data_login;
+    SharedPreferences sharedPreferences;
     Dialog dialog;
-    int check=0;
+    int check = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,13 +62,8 @@ public class Fragment_login extends Fragment {
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
         bottomNavigationView.setVisibility(View.GONE);
         data_login = ((MainActivity) requireActivity()).getData_login();
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("user",Context.MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(sharedPreferences.getString("account","").equals("") && sharedPreferences.getString("password","").equals("")){
-            fragmentLoginBinding.taikhoan.setText(sharedPreferences.getString("account",""));
-            fragmentLoginBinding.matkhau.setText(sharedPreferences.getString("password",""));
-            fragmentLoginBinding.buttonLogin.performClick();
-        }
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -83,8 +80,8 @@ public class Fragment_login extends Fragment {
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull ResponseBody s) {
                 try {
                     if (s.string().equals("success")) {
-                        editor.putString("account",fragmentLoginBinding.taikhoan.getText().toString());
-                        editor.putString("password",fragmentLoginBinding.taikhoan.getText().toString());
+                        editor.putString("account", fragmentLoginBinding.taikhoan.getText().toString());
+                        editor.putString("password", fragmentLoginBinding.matkhau.getText().toString());
                         editor.apply();
                         data_login.setData(fragmentLoginBinding.taikhoan.getText().toString());
                         NavController navController = Navigation.findNavController(fragmentLoginBinding.getRoot());
@@ -160,7 +157,7 @@ public class Fragment_login extends Fragment {
                     imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
                     fragmentLoginBinding.getRoot().clearFocus();
                 }
-            }else if (event.getAction() == MotionEvent.ACTION_UP) {
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 fragmentLoginBinding.getRoot().performClick();
             }
             return false;
@@ -188,7 +185,7 @@ public class Fragment_login extends Fragment {
             @Override
             public void onComplete() {
                 check++;
-                if(check==2){
+                if (check == 2) {
                     dialog.dismiss();
                 }
 
@@ -214,12 +211,22 @@ public class Fragment_login extends Fragment {
             @Override
             public void onComplete() {
                 check++;
-                if(check==2){
+                if (check == 2) {
                     dialog.dismiss();
                 }
             }
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!sharedPreferences.getString("account", "").equals("") && !sharedPreferences.getString("password", "").equals("")) {
+            fragmentLoginBinding.taikhoan.setText(sharedPreferences.getString("account", ""));
+            fragmentLoginBinding.matkhau.setText(sharedPreferences.getString("password", ""));
+            fragmentLoginBinding.buttonLogin.setEnabled(true);
+            fragmentLoginBinding.buttonLogin.performClick();
+        }
+    }
 }
 

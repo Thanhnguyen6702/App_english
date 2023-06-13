@@ -13,9 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
-
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -33,6 +31,7 @@ public interface ApiService {
             .client(okBuilder.build())
             .build()
             .create(ApiService.class);
+
     @GET("thanh/getdata2.php")
     Observable<List<Value>> getListValue(@Query("table") String table);
 
@@ -47,23 +46,38 @@ public interface ApiService {
 
     @GET("thanh/detail_info.php")
     Observable<Detail_info> getDetailInfo(@Query("account") String account);
+
     @FormUrlEncoded
     @POST("thanh/answer_true.php")
     Observable<Void> postTrue(@Field("account") String account, @Field("answer") String answer);
+
     @FormUrlEncoded
     @POST("thanh/answer_false.php")
     Observable<Void> postFalse(@Field("account") String account, @Field("answer") String answer);
+
     @FormUrlEncoded
     @POST("/thanh/study.php")
-    Observable<Void> postStudy(@Field("account") String account,@Field("answer") String answer);
+    Observable<Void> postStudy(@Field("account") String account, @Field("answer") String answer);
+
     @GET("thanh/study_topic.php")
-    Observable<List<Vocabulary>> getStudy_topic(@Query("account") String account,@Query("topic") String topic);
+    Observable<List<Vocabulary>> getStudy_topic(@Query("account") String account, @Query("topic") String topic);
+
+    @GET("thanh/study_topic_phatam.php")
+    Observable<List<Vocabulary>> getStudy_topic_phatam(@Query("account") String account, @Query("topic") String topic);
+
     @GET("thanh/topic.php")
     Observable<List<Topic>> getTopic(@Query("account") String account);
+
     @GET("thanh/definitions.php")
     Observable<Definition> getDefinition(@Query("word") String word);
+
     @GET("thanh/examples.php")
     Observable<Example> getExample(@Query("word") String word);
+
     @GET("thanh/topicphatam.php")
     Observable<List<Topicphatam>> getTopicphatam(@Query("account") String account);
+
+    @FormUrlEncoded
+    @POST("thanh/score_pron.php")
+    Observable<Void> postScore(@Field("account") String account, @Field("word") String word, @Field("score") int score);
 }
