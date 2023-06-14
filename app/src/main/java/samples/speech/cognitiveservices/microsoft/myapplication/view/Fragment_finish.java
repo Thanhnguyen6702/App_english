@@ -37,10 +37,12 @@ public class Fragment_finish extends Fragment {
     List<Value> value_reviseList;
     Share_revise share_revise;
     ShareViewModel shareViewModel;
+    Button button;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_finish, container, false);
+        button = view.findViewById(R.id.button_finish);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView = view.findViewById(R.id.rcv_finish);
         recyclerView.setLayoutManager(layoutManager);
@@ -72,7 +74,7 @@ public class Fragment_finish extends Fragment {
         ApiService.apiService.getDetailInfo(shareViewModel.getData().getValue()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Detail_info>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
+                    button.setEnabled(false);
             }
 
             @Override
@@ -87,7 +89,7 @@ public class Fragment_finish extends Fragment {
 
             @Override
             public void onComplete() {
-
+                    button.setEnabled(true);
             }
         });
     }

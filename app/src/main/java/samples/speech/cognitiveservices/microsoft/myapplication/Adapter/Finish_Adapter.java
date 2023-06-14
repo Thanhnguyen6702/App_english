@@ -53,7 +53,7 @@ public class Finish_Adapter extends RecyclerView.Adapter<Finish_Adapter.Finish_V
             tienganh = itemView.findViewById(R.id.tienganh_item);
             tiengviet = itemView.findViewById(R.id.tiengviet_item);
             ngayontap = itemView.findViewById(R.id.ngayontap);
-            volume = itemView.findViewById(R.id.image_finish);
+            volume = itemView.findViewById(R.id.image_voice);
         }
     }
 }
