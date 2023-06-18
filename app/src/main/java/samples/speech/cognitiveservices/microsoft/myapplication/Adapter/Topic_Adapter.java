@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,11 +29,13 @@ import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_
 public class Topic_Adapter extends RecyclerView.Adapter<Topic_Adapter.Topic_ViewHolder> {
     List<Topic> listTopic;
     List<Topic_hori_Adapter> topic_hori_adapterList = new ArrayList<>();
+    View view_parent;
 
-    public Topic_Adapter(List<Topic> listTopic, OnclickItemadapter onclickItemadapter) {
+    public Topic_Adapter(List<Topic> listTopic, OnclickItemadapter onclickItemadapter, View view_parent) {
         this.listTopic = listTopic;
+        this.view_parent = view_parent;
         for (int i = 0; i < listTopic.size(); i++) {
-            topic_hori_adapterList.add(new Topic_hori_Adapter(listTopic.get(i), onclickItemadapter));
+            topic_hori_adapterList.add(new Topic_hori_Adapter(listTopic.get(i), onclickItemadapter, view_parent));
         }
     }
 
@@ -75,10 +80,12 @@ public class Topic_Adapter extends RecyclerView.Adapter<Topic_Adapter.Topic_View
 class Topic_hori_Adapter extends RecyclerView.Adapter<Topic_hori_Adapter.Topic_hori_Viewholder> {
     Topic topic;
     Topic_Adapter.OnclickItemadapter onclickItemadapter;
+    View view_parent;
 
-    public Topic_hori_Adapter(Topic topic, Topic_Adapter.OnclickItemadapter onclickItemadapter) {
+    public Topic_hori_Adapter(Topic topic, Topic_Adapter.OnclickItemadapter onclickItemadapter, View view_parent) {
         this.topic = topic;
         this.onclickItemadapter = onclickItemadapter;
+        this.view_parent = view_parent;
     }
 
     @NonNull
@@ -101,13 +108,25 @@ class Topic_hori_Adapter extends RecyclerView.Adapter<Topic_hori_Adapter.Topic_h
                 .load(topic.getChildtopic().get(position).getImage())
                 .into(holder.imageView);
         holder.itemView.setOnClickListener(view -> {
-            if( onclickItemadapter.Onclick()==1) {
+            if (onclickItemadapter.Onclick() == R.id.action_fragment_topic_to_fragment_home) {
                 Share_revise share_revise = ((MainActivity) holder.itemView.getContext()).getData_revise();
-                share_revise.setTopic(new ArrayList<>(Arrays.asList(topic.getChildtopic().get(position).getChildtopic(), topic.getChildtopic().get(position).getImage())));
-            }
-            else{
+                if (Integer.parseInt(topic.getChildtopic().get(position).getSotu_chuahoc()) > 0) {
+                    share_revise.setTopic(new ArrayList<>(Arrays.asList(topic.getChildtopic().get(position).getChildtopic(), topic.getChildtopic().get(position).getImage())));
+                    NavController navController = Navigation.findNavController(view_parent);
+                    navController.navigate(R.id.action_fragment_topic_to_fragment_home);
+                } else {
+                    Toast.makeText(holder.itemView.getContext(), "Bạn đã hoàn thành chủ đề này ròi!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
                 ShareViewModel shareViewModel = ((MainActivity) holder.itemView.getContext()).getData_login();
-                shareViewModel.setTopic_phatam(topic.getChildtopic().get(position).getChildtopic());
+                if (Integer.parseInt(topic.getChildtopic().get(position).getSotu_chuahoc()) > 0) {
+                    shareViewModel.setTopic_phatam(topic.getChildtopic().get(position).getChildtopic());
+                    NavController navController = Navigation.findNavController(view_parent);
+                    navController.navigate(R.id.action_fragment_topic_to_fragment_voice);
+                } else {
+                    Toast.makeText(holder.itemView.getContext(), "Bạn đã hoàn thành chủ đề này ròi!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

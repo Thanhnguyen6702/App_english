@@ -36,7 +36,7 @@ public class Value_Adapter extends RecyclerView.Adapter<Value_Adapter.Value_View
             holder.mic.setOnClickListener(view->{
 
             });
-            holder.volume.setOnClickListener(view-> text_to_voice.voice(value.getTienganh()));
+            holder.volume.setOnClickListener(view-> text_to_voice.voice(value.getTienganh(),"en-US"));
     }
 
     @Override

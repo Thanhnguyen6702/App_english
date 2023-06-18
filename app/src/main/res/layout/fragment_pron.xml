@@ -88,17 +88,49 @@
         android:layout_height="50dp"
         android:layout_alignTop="@+id/mic_assess"
         android:layout_alignBottom="@+id/mic_assess"
-
         android:layout_toStartOf="@+id/mic_assess"
         android:layout_marginEnd="40dp"
         android:src="@drawable/volume" />
+
+    <Button
+        android:id="@+id/phatamcumtu"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tiengviet_assess"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/background_login"
+        android:drawableRight="@drawable/next"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="Phát âm với cụm từ "
+        android:textAllCaps="false"
+        android:textColor="@color/teal_200"
+        android:textSize="15dp" />
+
     <ImageView
-        android:id="@+id/next_pron"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/next"
+        android:id="@+id/head_phone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/head_phone"
         android:layout_toEndOf="@+id/mic_assess"
+        android:layout_alignBottom="@+id/mic_assess"
         android:layout_alignTop="@+id/mic_assess"
         android:layout_marginStart="40dp"/>
+    <Button
+        android:id="@+id/next_pron"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:text="Từ tiếp theo"
+        android:textColor="@color/teal_200"
+        android:background="@drawable/background_login"
+        android:backgroundTint="@color/teal_50"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"/>
 
 </RelativeLayout>

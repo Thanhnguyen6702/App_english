@@ -36,7 +36,7 @@ public class Finish_Adapter extends RecyclerView.Adapter<Finish_Adapter.Finish_V
         holder.tiengviet.setText(value.getTiengviet());
         holder.ngayontap.setText(value.getCheckday()+" ngày");
         holder.volume.setOnClickListener(view->{
-            text_to_voice.voice(holder.tienganh.getText().toString());
+            text_to_voice.voice(holder.tienganh.getText().toString(),"en-US");
         });
     }
 

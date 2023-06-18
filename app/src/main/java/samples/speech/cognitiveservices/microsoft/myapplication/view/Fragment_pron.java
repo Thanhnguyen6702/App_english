@@ -9,6 +9,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
@@ -23,6 +26,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +41,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.microsoft.cognitiveservices.speech.KeywordRecognitionModel;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentConfig;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentGradingSystem;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentGranularity;
@@ -49,10 +52,10 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.audio.AudioProcessingConstants;
 import com.microsoft.cognitiveservices.speech.audio.AudioProcessingOptions;
 
+import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +75,10 @@ import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareV
 
 public class Fragment_pron extends Fragment {
     View view;
-    ImageView mic, volume, next, close;
+    AudioTrack audioTrack;
+    String filePath;
+    ImageView mic, volume, close, head_phone;
+    Button next, phatamcumtu;
     TextView tienganh, phienam, tiengviet, textboy;
     //Voice_to_text voice_to_text = new Voice_to_text();
     Text_to_voice text_to_voice = new Text_to_voice();
@@ -81,12 +87,11 @@ public class Fragment_pron extends Fragment {
     String Text, tieng_anh;
     int start = 0;
     SpeechConfig speechConfig;
-    KeywordRecognitionModel kwsModel;
     private MicrophoneStream microphoneStream;
 
     private MicrophoneStream createMicrophoneStream() {
         this.releaseMicrophoneStream();
-        microphoneStream = new MicrophoneStream();
+        microphoneStream = new MicrophoneStream(filePath);
         return microphoneStream;
     }
 
@@ -102,24 +107,31 @@ public class Fragment_pron extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_pron, container, false);
+        filePath = getContext().getExternalFilesDir(null).getAbsolutePath() + "/record.wav";
         // create config
         speechConfig = SpeechConfig.fromSubscription(Key_API.SpeechSubscriptionKey, Key_API.SpeechRegion);
-        kwsModel = KeywordRecognitionModel.fromFile(copyAssetToCacheAndGetFilePath(Key_API.KwsModelFile));
+        // kwsModel = KeywordRecognitionModel.fromFile(copyAssetToCacheAndGetFilePath(Key_API.KwsModelFile));
         mic = view.findViewById(R.id.mic_assess);
         next = view.findViewById(R.id.next_pron);
         close = view.findViewById(R.id.close_pronun);
         close.setOnClickListener(view1 -> {
-           close_fragment();
+            close_fragment();
         });
-        next.setVisibility(View.GONE);
         volume = view.findViewById(R.id.volume_assess);
         tienganh = view.findViewById(R.id.tienganh_assess);
         phienam = view.findViewById(R.id.phienam_assess);
         tiengviet = view.findViewById(R.id.tiengviet_assess);
         textboy = view.findViewById(R.id.textBoy);
+        phatamcumtu = view.findViewById(R.id.phatamcumtu);
+        head_phone = view.findViewById(R.id.head_phone);
+        disableHeadphone();
+        Drawable draw_back = ContextCompat.getDrawable(requireContext(), R.drawable.back_teal200);
+        draw_back.setBounds(0, 0, draw_back.getIntrinsicWidth(), draw_back.getIntrinsicHeight());
+        Drawable draw_next = ContextCompat.getDrawable(requireContext(), R.drawable.next);
+        draw_next.setBounds(0, 0, draw_next.getIntrinsicWidth(), draw_next.getIntrinsicHeight());
         batdau();
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
-            getData(shareViewModel.getData().getValue(), shareViewModel.getTopicphatam().getValue());
+        getData(shareViewModel.getData().getValue(), shareViewModel.getTopicphatam().getValue());
         shareViewModel.getchuahoc_phatam().observe(getViewLifecycleOwner(), listVovab -> {
             tienganh.setText(listVovab.get(start).getTienganh());
             tiengviet.setText(listVovab.get(start).getTiengviet());
@@ -140,16 +152,22 @@ public class Fragment_pron extends Fragment {
         }
 
 
-        volume.setOnClickListener(view1 -> text_to_voice.voice(tienganh.getText().toString()));
+        volume.setOnClickListener(view1 -> text_to_voice.voice(tienganh.getText().toString(), "en-US"));
         next.setOnClickListener(view1 -> {
-            start++;
-            batdau();
-            next.setVisibility(View.GONE);
-            if(start>vocabularies.size()*2){
-                close_fragment();
-                Toast.makeText(requireContext(),"Bạn đã hoàn thành xong chủ đề này!",Toast.LENGTH_SHORT).show();
-            }
+            disableHeadphone();
             if (start % 2 == 0) {
+                start += 2;
+            } else {
+                start += 1;
+            }
+            batdau();
+            next.setEnabled(false);
+            if (start >= vocabularies.size() * 2) {
+                close_fragment();
+                Toast.makeText(requireContext(), "Bạn đã hoàn thành xong chủ đề này!", Toast.LENGTH_SHORT).show();
+            } else {
+                phatamcumtu.setText("Phát âm cụm từ ");
+                phatamcumtu.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, draw_next, null);
                 tienganh.setText(vocabularies.get(start / 2).getTienganh());
                 tiengviet.setText(vocabularies.get(start / 2).getTiengviet());
                 phienam.setText(vocabularies.get(start / 2).getPhienam());
@@ -158,11 +176,33 @@ public class Fragment_pron extends Fragment {
                 tiengviet.setVisibility(View.VISIBLE);
                 phienam.setVisibility(View.VISIBLE);
                 getExample(Text);
-            } else {
+            }
+        });
+        phatamcumtu.setOnClickListener(view1 -> {
+            disableHeadphone();
+            if (start % 2 == 0) {
+                start += 1;
+                phatamcumtu.setText(" Phát âm từ");
+                phatamcumtu.setCompoundDrawablesRelativeWithIntrinsicBounds(draw_back, null, null, null);
                 tienganh.setText(Text);
                 tiengviet.setVisibility(View.GONE);
                 phienam.setVisibility(View.GONE);
+            } else {
+                start = start - 1;
+                phatamcumtu.setText("Phát âm cụm từ ");
+                phatamcumtu.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, draw_next, null);
+                tienganh.setText(vocabularies.get(start / 2).getTienganh());
+                tiengviet.setText(vocabularies.get(start / 2).getTiengviet());
+                phienam.setText(vocabularies.get(start / 2).getPhienam());
+                Text = tienganh.getText().toString();
+                tieng_anh = tienganh.getText().toString();
+                tiengviet.setVisibility(View.VISIBLE);
+                phienam.setVisibility(View.VISIBLE);
+                getExample(Text);
             }
+        });
+        head_phone.setOnClickListener(view1 -> {
+            playAudio(filePath);
         });
         Boolean isconnect = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -187,25 +227,25 @@ public class Fragment_pron extends Fragment {
         return view;
     }
 
-    private String copyAssetToCacheAndGetFilePath(String filename) {
-        File cacheFile = new File(getActivity().getCacheDir() + "/" + filename);
-        if (!cacheFile.exists()) {
-            try {
-                InputStream is = getActivity().getAssets().open(filename);
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-                FileOutputStream fos = new FileOutputStream(cacheFile);
-                fos.write(buffer);
-                fos.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return cacheFile.getPath();
-    }
-
+    /* private String copyAssetToCacheAndGetFilePath(String filename) {
+         File cacheFile = new File(getActivity().getCacheDir() + "/" + filename);
+         if (!cacheFile.exists()) {
+             try {
+                 InputStream is = getActivity().getAssets().open(filename);
+                 int size = is.available();
+                 byte[] buffer = new byte[size];
+                 is.read(buffer);
+                 is.close();
+                 FileOutputStream fos = new FileOutputStream(cacheFile);
+                 fos.write(buffer);
+                 fos.close();
+             } catch (Exception e) {
+                 throw new RuntimeException(e);
+             }
+         }
+         return cacheFile.getPath();
+     }
+ */
     public void getExample(String word) {
         ApiService.apiService.getExample(word).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Example>() {
             @Override
@@ -215,11 +255,11 @@ public class Fragment_pron extends Fragment {
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Example example) {
-                if(example.getExample()!=null && !example.getExample().isEmpty()) {
+                if (example.getExample() != null && !example.getExample().isEmpty()) {
+                    phatamcumtu.setVisibility(View.VISIBLE);
                     Text = example.getExample().get(0);
-                }
-                else{
-                    start++;
+                } else {
+                    phatamcumtu.setVisibility(View.GONE);
                 }
             }
 
@@ -230,7 +270,6 @@ public class Fragment_pron extends Fragment {
 
             @Override
             public void onComplete() {
-                next.setVisibility(View.GONE);
             }
         });
     }
@@ -281,11 +320,13 @@ public class Fragment_pron extends Fragment {
     }
 
     public void ketqua(double score) {
+        enableHeadphone();
         if (score > 75) {
             textboy.setText("Xuất sắc! điểm của bạn là " + (int) score);
         } else if (score > 30) {
             textboy.setText("Khá ổn! điểm của bạn là " + (int) score);
         } else textboy.setText("Hơi tệ! điểm của bạn là " + (int) score);
+        text_to_voice.voice(textboy.getText().toString(), "vi-VN");
     }
 
     public void record() {
@@ -333,7 +374,7 @@ public class Fragment_pron extends Fragment {
                 if (pronResult != null) {
                     for (int i = 0; i < count; i++) {
                         double score = pronResult.getWords().get(i).getAccuracyScore();
-                        if(start%2==1 && count>1){
+                        if (count > 1) {
                             score_tienganh = pronResult.getPronunciationScore();
                         }
                         if (tieng_anh.equalsIgnoreCase(pronResult.getWords().get(i).getWord())) {
@@ -355,10 +396,11 @@ public class Fragment_pron extends Fragment {
                         ketqua(score_tienganh1);
                         // this.mic.setImageResource(R.drawable.mic);
                         tienganh.setText(finalSpannableString);
-                        postScore(shareViewModel.getData().getValue(),tieng_anh,(int) score_tienganh1);
+                        postScore(shareViewModel.getData().getValue(), tieng_anh, (int) score_tienganh1);
                     });
                 } else {
                     textboy.setText("Vui lòng phát âm lại!");
+                    text_to_voice.voice("Vui lòng phát âm lại!", "vi-VN");
                 }
 
             });
@@ -367,7 +409,7 @@ public class Fragment_pron extends Fragment {
                 reco.stopContinuousRecognitionAsync();
                 this.releaseMicrophoneStream();
                 getActivity().runOnUiThread(() -> {
-                    next.setVisibility(View.VISIBLE);
+                    next.setEnabled(true);
                     this.mic.setImageResource(R.drawable.mic);
                     mic.setEnabled(true);
                 });
@@ -416,34 +458,71 @@ public class Fragment_pron extends Fragment {
             }
         });
     }
-            public void postScore(String account,String word,int score){
-                    ApiService.apiService.postScore(account,word,score).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Void>() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                        }
+    public void postScore(String account, String word, int score) {
+        ApiService.apiService.postScore(account, word, score).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Void>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                        @Override
-                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull Void unused) {
-
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
             }
-        public void close_fragment(){
-            shareViewModel.setShare_sotuphatam(null);
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_voice_to_framgent_phatam);
-            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
-            bottomNavigationView.setVisibility(View.VISIBLE);
+
+            @Override
+            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Void unused) {
+
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    public void close_fragment() {
+        shareViewModel.setShare_sotuphatam(null);
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_fragment_voice_to_framgent_phatam);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    public void disableHeadphone() {
+        head_phone.setEnabled(false);
+        head_phone.setColorFilter(R.color.grey);
+    }
+
+    public void enableHeadphone() {
+        head_phone.setEnabled(true);
+        head_phone.setColorFilter(R.color.teal_200);
+    }
+
+    private void playAudio(String filePath) {
+        try {
+            File file = new File(filePath);
+            int bufferSize = AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+
+            byte[] buffer = new byte[bufferSize];
+            DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
+
+            audioTrack.play();
+
+            while (dataInputStream.available() > 0) {
+                int bytesRead = dataInputStream.read(buffer, 0, buffer.length);
+                if (bytesRead != AudioTrack.ERROR_INVALID_OPERATION) {
+                    audioTrack.write(buffer, 0, bytesRead);
+                }
+            }
+
+            audioTrack.stop();
+            audioTrack.release();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 }

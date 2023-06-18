@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +39,7 @@ public class Fragment_topic extends Fragment implements Topic_Adapter.OnclickIte
         if (shareViewModel.getNav().getValue() == R.id.action_fragment_topic_to_fragment_home) {
             share_revise.getlistTopic().observe(getViewLifecycleOwner(), listTopic -> {
                 if (!listTopic.isEmpty()) {
-                    Topic_Adapter topic_adapter = new Topic_Adapter(listTopic, this);
+                    Topic_Adapter topic_adapter = new Topic_Adapter(listTopic, this,view);
                     recyclerView.setAdapter(topic_adapter);
                 }
             });
@@ -50,7 +48,7 @@ public class Fragment_topic extends Fragment implements Topic_Adapter.OnclickIte
                 if (!listTopic.isEmpty()) {
 
                     List<Topic> listtopic1 = new ArrayList<>(listTopic);
-                    Topic_Adapter topic_adapter = new Topic_Adapter(listtopic1, this);
+                    Topic_Adapter topic_adapter = new Topic_Adapter(listtopic1, this,view);
                     recyclerView.setAdapter(topic_adapter);
                 }
             });
@@ -61,10 +59,6 @@ public class Fragment_topic extends Fragment implements Topic_Adapter.OnclickIte
 
     @Override
     public int Onclick() {
-        NavController navController = Navigation.findNavController(view);
-        navController.navigate(shareViewModel.getNav().getValue());
-        if (shareViewModel.getNav().getValue() == R.id.action_fragment_topic_to_fragment_home) {
-            return 1;
-        } else return 0;
+        return shareViewModel.getNav().getValue();
     }
 }

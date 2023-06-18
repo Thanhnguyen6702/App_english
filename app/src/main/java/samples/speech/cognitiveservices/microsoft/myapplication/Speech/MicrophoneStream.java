@@ -7,9 +7,15 @@ package samples.speech.cognitiveservices.microsoft.myapplication.Speech;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.NoiseSuppressor;
+import android.util.Log;
 
 import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
 import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * MicrophoneStream exposes the Android Microphone as an PullAudioInputStreamCallback
@@ -20,10 +26,12 @@ public class MicrophoneStream extends PullAudioInputStreamCallback {
     private final static int SAMPLE_RATE = 16000;
     private final AudioStreamFormat format;
     private AudioRecord recorder;
-
-    public MicrophoneStream() {
+    private FileOutputStream outputStream;
+    String filePath;
+    public MicrophoneStream(String filePath) {
         this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
         this.initMic();
+        this.initOutputFile(filePath);
     }
 
     public AudioStreamFormat getFormat() {
@@ -33,8 +41,16 @@ public class MicrophoneStream extends PullAudioInputStreamCallback {
     @Override
     public int read(byte[] bytes) {
         if (this.recorder != null) {
-            long ret = this.recorder.read(bytes, 0, bytes.length);
-            return (int) ret;
+            int ret = this.recorder.read(bytes, 0, bytes.length);
+            if (ret > 0) {
+                try {
+                    outputStream.write(bytes, 0, ret);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("MicrophoneStream", "Error writing audio data to file: " + e.getMessage());
+                }
+            }
+            return ret;
         }
         return 0;
     }
@@ -43,6 +59,12 @@ public class MicrophoneStream extends PullAudioInputStreamCallback {
     public void close() {
         this.recorder.release();
         this.recorder = null;
+        try {
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initMic() {
@@ -56,7 +78,26 @@ public class MicrophoneStream extends PullAudioInputStreamCallback {
                 .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
                 .setAudioFormat(af)
                 .build();
-
+        if (NoiseSuppressor.isAvailable()) {
+            NoiseSuppressor noiseSuppressor = NoiseSuppressor.create(this.recorder.getAudioSessionId());
+            if (noiseSuppressor != null) {
+                noiseSuppressor.setEnabled(true);
+            }
+        }
         this.recorder.startRecording();
     }
+
+    private void initOutputFile(String filePath) {
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            outputStream = new FileOutputStream(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("MicrophoneStream", "Error initializing output file: " + e.getMessage());
+        }
+    }
+
 }

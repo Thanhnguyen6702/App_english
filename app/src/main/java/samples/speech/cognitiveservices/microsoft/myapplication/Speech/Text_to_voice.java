@@ -9,16 +9,15 @@ import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
 public class Text_to_voice {
     private SpeechConfig speechConfig;
     private SpeechSynthesizer synthesizer;
-    public void setConfig(){
-        speechConfig = SpeechConfig.fromSubscription(Key_API.SpeechSubscriptionKey, Key_API.SpeechRegion);
-        speechConfig.setSpeechSynthesisVoiceName("en-US-JennyNeural");
-        synthesizer = new SpeechSynthesizer(speechConfig);
-    }
-    public Text_to_voice(){
+
+    public Text_to_voice() {
         setConfig();
     }
-    public void voice(String text) {
+
+    public void voice(String text, String locale) {
         try {
+            speechConfig.setSpeechSynthesisVoiceName(getVoiceName(locale));
+            SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig);
             SpeechSynthesisResult result = synthesizer.SpeakText(text);
             assert (result != null);
             result.close();
@@ -28,4 +27,18 @@ public class Text_to_voice {
         }
     }
 
+    private void setConfig() {
+        speechConfig = SpeechConfig.fromSubscription(Key_API.SpeechSubscriptionKey, Key_API.SpeechRegion);
+    }
+
+    private String getVoiceName(String locale) {
+        switch (locale) {
+            case "en-US":
+                return "en-US-JennyNeural";
+            case "vi-VN":
+                return "vi-VN-HoaiMyNeural";
+            default:
+                throw new IllegalArgumentException("Unsupported locale: " + locale);
+        }
+    }
 }

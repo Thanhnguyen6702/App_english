@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         // Hide the status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         data_login = new ViewModelProvider(this).get(ShareViewModel.class);
