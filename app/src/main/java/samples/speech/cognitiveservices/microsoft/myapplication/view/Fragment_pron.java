@@ -152,7 +152,9 @@ public class Fragment_pron extends Fragment {
         }
 
 
-        volume.setOnClickListener(view1 -> text_to_voice.voice(tienganh.getText().toString(), "en-US"));
+        volume.setOnClickListener(view1 -> {
+            text_to_voice.voice(tienganh.getText().toString(), "en-US");
+        });
         next.setOnClickListener(view1 -> {
             disableHeadphone();
             if (start % 2 == 0) {
@@ -294,29 +296,35 @@ public class Fragment_pron extends Fragment {
     }
 
     public void batdau() {
-        SpannableString spantext = new SpannableString("Nhấn vào biểu tượng  để bắt đầu!");
-        Drawable draw = ContextCompat.getDrawable(requireContext(), R.drawable.mic);
-        draw.setBounds(0, 0, (int) textboy.getTextSize(), (int) textboy.getTextSize());
-        ImageSpan imageSpan = new ImageSpan(draw, ImageSpan.ALIGN_BASELINE);
-        spantext.setSpan(imageSpan, 19, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textboy.setText(spantext);
+        getActivity().runOnUiThread(() -> {
+            SpannableString spantext = new SpannableString("Nhấn vào biểu tượng  để bắt đầu!");
+            Drawable draw = ContextCompat.getDrawable(requireContext(), R.drawable.mic);
+            draw.setBounds(0, 0, (int) textboy.getTextSize(), (int) textboy.getTextSize());
+            ImageSpan imageSpan = new ImageSpan(draw, ImageSpan.ALIGN_BASELINE);
+            spantext.setSpan(imageSpan, 19, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textboy.setText(spantext);
+        });
     }
 
     public void dangnghe() {
-        textboy.setText("Mình đang nghe ...");
+        getActivity().runOnUiThread(() -> {
+            textboy.setText("Mình đang nghe ...");
+        });
     }
 
     public void nghexong() {
-        SpannableString spantext = new SpannableString("Đợi mình chút  ");
-        try {
-            GifDrawable gifDrawable = new GifDrawable(getResources(), R.drawable.ellipsis);
-            gifDrawable.setBounds(0, 0, (int) textboy.getTextSize(), (int) textboy.getTextSize());
-            ImageSpan imageSpan = new ImageSpan(gifDrawable);
-            spantext.setSpan(imageSpan, spantext.toString().length() - 1, spantext.toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textboy.setText(spantext);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getActivity().runOnUiThread(() -> {
+            SpannableString spantext = new SpannableString("Đợi mình chút  ");
+            try {
+                GifDrawable gifDrawable = new GifDrawable(getResources(), R.drawable.ellipsis);
+                gifDrawable.setBounds(0, 0, (int) textboy.getTextSize(), (int) textboy.getTextSize());
+                ImageSpan imageSpan = new ImageSpan(gifDrawable);
+                spantext.setSpan(imageSpan, spantext.toString().length() - 1, spantext.toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textboy.setText(spantext);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void ketqua(double score) {
@@ -326,9 +334,13 @@ public class Fragment_pron extends Fragment {
         } else if (score > 30) {
             textboy.setText("Khá ổn! điểm của bạn là " + (int) score);
         } else textboy.setText("Hơi tệ! điểm của bạn là " + (int) score);
-        text_to_voice.voice(textboy.getText().toString(), "vi-VN");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                text_to_voice.voice(textboy.getText().toString(), "vi-VN");
+            }
+        },100);
     }
-
     public void record() {
         Handler handler = new Handler();
         Runnable runnable = () -> mic.performClick();
@@ -399,8 +411,16 @@ public class Fragment_pron extends Fragment {
                         postScore(shareViewModel.getData().getValue(), tieng_anh, (int) score_tienganh1);
                     });
                 } else {
-                    textboy.setText("Vui lòng phát âm lại!");
-                    text_to_voice.voice("Vui lòng phát âm lại!", "vi-VN");
+                    getActivity().runOnUiThread(() -> {
+                        textboy.setText("Vui lòng phát âm lại!");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                text_to_voice.voice("Vui lòng phát âm lại!", "vi-VN");
+                            }
+                        },100);
+                    });
+
                 }
 
             });
@@ -498,13 +518,13 @@ public class Fragment_pron extends Fragment {
 
     public void enableHeadphone() {
         head_phone.setEnabled(true);
-        head_phone.setColorFilter(R.color.teal_200);
+        head_phone.clearColorFilter();
     }
 
     private void playAudio(String filePath) {
         try {
             File file = new File(filePath);
-            int bufferSize = AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+            int bufferSize = 8192;
             audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
 
             byte[] buffer = new byte[bufferSize];

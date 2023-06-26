@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,6 +70,8 @@ public class Fragment_home extends Fragment {
                     fragment_home_viewModel.setTuhomnayhoc("Hôm nay cần học: " + detail_info.getHoc().size() + " từ");
                     fragment_home_viewModel.setName("Ôn tập");
                     fragmentHomeBinding.layoutLearn.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_revise));
+                    ImageView imageView = fragmentHomeBinding.layoutLearn.findViewById(R.id.imageview_home);
+                    imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.magnifying_glass));
                     fragmentHomeBinding.topic.setText("");
                 }
             }
