@@ -212,12 +212,25 @@
                 android:text="@{Fragment_home_ViewModel.name}"
                 android:textColor="@color/teal_200" />
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_home"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@color/grey_100"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
             <ImageView
                 android:id="@+id/imageview_home"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"/>
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

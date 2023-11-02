@@ -62,13 +62,13 @@ public class Fragment_study2 extends Fragment {
         share_revise.getDefinition().observe(getViewLifecycleOwner(), definition1 -> {
             if (definition1 != null) {
                 linearLayout1.setEnabled(true);
-                if (!definition1.getMeaning().getNoun().isEmpty())
+                if (definition1.getMeaning().getNoun() !=null)
                     preps.add(new Fragment_study2.Prep("noun", definition1.getMeaning().getNoun().get(0)));
-                if (!definition1.getMeaning().getVerb().isEmpty())
+                if (definition1.getMeaning().getVerb()!=null)
                     preps.add(new Fragment_study2.Prep("verb", definition1.getMeaning().getVerb().get(0)));
-                if (!definition1.getMeaning().getAdjective().isEmpty())
+                if (definition1.getMeaning().getAdjective()!=null)
                     preps.add(new Fragment_study2.Prep("adjective", definition1.getMeaning().getAdjective().get(0)));
-                if (!definition1.getMeaning().getAdverb().isEmpty())
+                if (definition1.getMeaning().getAdverb()!=null)
                     preps.add(new Fragment_study2.Prep("adverb", definition1.getMeaning().getAdverb().get(0)));
                 end = preps.size() - 1;
             }

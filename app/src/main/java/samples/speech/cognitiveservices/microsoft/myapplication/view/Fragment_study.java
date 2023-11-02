@@ -2,6 +2,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,10 +62,10 @@ public class Fragment_study extends Fragment {
         fragmentStudyBinding.textQuestionStudy.setText(chua_hoc.get(0).getTienganh());
         fragmentStudyBinding.phienam.setText(chua_hoc.get(0).getPhienam());
         int sotu=0;
-        if (share_revise.getValue_resive().getValue() != null) {
-            sotu = share_revise.getValue_resive().getValue().size()+1;
+        if (share_revise.getValue_revise().getValue() != null) {
+            sotu = share_revise.getValue_revise().getValue().size();
         }
-        fragmentStudyBinding.socauStudy.setText(sotu + "/" + (chua_hoc.size()+sotu));
+        fragmentStudyBinding.socauStudy.setText((sotu+1) + "/" + (chua_hoc.size()+sotu));
         arrayAnswer[0] = chua_hoc.get(0).getTiengviet();
         for (int i = 1; i <= 3; i++) {
             if (arrayAnswer[0].equals(listvalue.get(start).getTiengviet())) {
@@ -79,7 +80,7 @@ public class Fragment_study extends Fragment {
         fragmentStudyBinding.Tiengviet3Study.setText(arrayAnswer[2]);
         fragmentStudyBinding.Tiengviet4Study.setText(arrayAnswer[3]);
         fragmentStudyBinding.closeStudy.setOnClickListener(view -> {
-            share_revise.setValue_resive(reviseList);
+            share_revise.setValue_revise(reviseList);
             if (reviseList != null) {
                 NavController navController = Navigation.findNavController(fragmentStudyBinding.getRoot());
                 navController.navigate(R.id.action_fragment_study_to_fragment_finish);
@@ -91,7 +92,7 @@ public class Fragment_study extends Fragment {
                 fragmentStudyBinding.Tiengviet1Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
                 next();
-                share_revise.setValue_resive(reviseList);
+                share_revise.setValue_revise(reviseList);
             } else {
                 fragmentStudyBinding.Tiengviet1Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);
@@ -104,7 +105,7 @@ public class Fragment_study extends Fragment {
                 fragmentStudyBinding.Tiengviet2Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
                 next();
-                share_revise.setValue_resive(reviseList);
+                share_revise.setValue_revise(reviseList);
 
             } else {
                 fragmentStudyBinding.Tiengviet2Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
@@ -119,7 +120,7 @@ public class Fragment_study extends Fragment {
                 fragmentStudyBinding.Tiengviet3Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
                 next();
-                share_revise.setValue_resive(reviseList);
+                share_revise.setValue_revise(reviseList);
 
             } else {
                 fragmentStudyBinding.Tiengviet3Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
@@ -133,7 +134,7 @@ public class Fragment_study extends Fragment {
                 fragmentStudyBinding.Tiengviet4Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 study(account, chua_hoc.get(0).getTienganh());
                 next();
-                share_revise.setValue_resive(reviseList);
+                share_revise.setValue_revise(reviseList);
             } else {
                 fragmentStudyBinding.Tiengviet4Study.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
                 disableImageview(view);

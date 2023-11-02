@@ -1,10 +1,9 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -51,7 +51,6 @@ public class Fragment_login extends Fragment {
     ShareViewModel data_login;
     SharedPreferences sharedPreferences;
     Dialog dialog;
-    int check = 0;
 
     @Nullable
     @Override
@@ -64,9 +63,8 @@ public class Fragment_login extends Fragment {
         data_login = ((MainActivity) requireActivity()).getData_login();
         sharedPreferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        dialog = new Dialog(requireContext());
+        dialog = new Dialog(requireContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.dialog_login);
         fragmentLoginBinding.buttonLogin.setOnClickListener(view1 -> ApiService.apiService.login(fragmentLoginBinding.taikhoan.getText().toString(), fragmentLoginBinding.matkhau.getText().toString()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
             @Override
@@ -87,7 +85,7 @@ public class Fragment_login extends Fragment {
                         NavController navController = Navigation.findNavController(fragmentLoginBinding.getRoot());
                         navController.navigate(R.id.action_fragment_login_to_fragment_home);
                         navController.popBackStack(R.id.fragment_login, true);
-                        get_data();
+                        getData(fragmentLoginBinding.taikhoan.getText().toString());
                     } else {
                         fragmentLoginBinding.taikhoan.setError("Tài khoản hoặc mật khẩu không chính xác");
                         fragmentLoginBinding.matkhau.setError("Tài khoản hoặc mật khẩu không chính xác");
@@ -165,68 +163,26 @@ public class Fragment_login extends Fragment {
         return fragmentLoginBinding.getRoot();
     }
 
-    public void get_data() {
-        ApiService.apiService.getDetailInfo(fragmentLoginBinding.taikhoan.getText().toString()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Detail_info>() {
-            @Override
-            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+    @SuppressLint("CheckResult")
+    public void getData(String account) {
+        Observable<Detail_info> detailInfoObservable = ApiService.apiService.getDetailInfo(account)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        Observable<List<Value>> listValueObservable = ApiService.apiService.getListValue(account)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
-            }
-
-            @Override
-            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Detail_info detail_info) {
-                data_login.setShareData_detail(detail_info);
-            }
-
-            @Override
-            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                check++;
-                if (check == 2) {
+       Observable.zip(detailInfoObservable, listValueObservable, (detail_info, values) -> {
+                    data_login.setShareData_detail(detail_info);
+                    data_login.setShare_listValue(values);
+                    return true;
+                })
+                .subscribe(success -> getActivity().runOnUiThread(()->{
                     dialog.dismiss();
-                }
+        }), throwable -> {
 
-            }
-        });
-
-        ApiService.apiService.getListValue(fragmentLoginBinding.taikhoan.getText().toString()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Value>>() {
-            @Override
-            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<Value> values) {
-                data_login.setShare_listValue(values);
-            }
-
-            @Override
-            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                check++;
-                if (check == 2) {
-                    dialog.dismiss();
-                }
-            }
-        });
+                });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!sharedPreferences.getString("account", "").equals("") && !sharedPreferences.getString("password", "").equals("")) {
-            fragmentLoginBinding.taikhoan.setText(sharedPreferences.getString("account", ""));
-            fragmentLoginBinding.matkhau.setText(sharedPreferences.getString("password", ""));
-            fragmentLoginBinding.buttonLogin.setEnabled(true);
-            fragmentLoginBinding.buttonLogin.performClick();
-        }
-    }
 }
 

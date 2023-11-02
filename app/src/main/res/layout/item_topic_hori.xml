@@ -35,6 +35,18 @@
         android:layout_marginBottom="4dp"
         android:layout_above="@+id/percent_learn"
         android:layout_alignStart="@+id/percent_learn"/>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_topic"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true">
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@color/grey_100"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <ImageView
         android:id="@+id/image_topic"
         android:layout_width="70dp"

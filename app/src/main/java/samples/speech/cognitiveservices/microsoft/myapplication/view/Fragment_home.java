@@ -2,6 +2,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -71,7 +77,7 @@ public class Fragment_home extends Fragment {
                     fragment_home_viewModel.setName("Ôn tập");
                     fragmentHomeBinding.layoutLearn.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_revise));
                     ImageView imageView = fragmentHomeBinding.layoutLearn.findViewById(R.id.imageview_home);
-                    imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.magnifying_glass));
+                    imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.magnifying_glass));
                     fragmentHomeBinding.topic.setText("");
                 }
             }
@@ -104,6 +110,8 @@ public class Fragment_home extends Fragment {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
                 fragmentHomeBinding.buttonLearn.setEnabled(false);
+                fragmentHomeBinding.shimmerHome.startShimmerAnimation();
+                fragmentHomeBinding.shimmerHome.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -126,17 +134,47 @@ public class Fragment_home extends Fragment {
                             fragmentHomeBinding.topic.setText(chua_hoc.gettopic().getValue().get(0));
                             Glide.with(fragmentHomeBinding.getRoot())
                                     .load(chua_hoc.gettopic().getValue().get(1))
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            fragmentHomeBinding.shimmerHome.stopShimmerAnimation();
+                                            fragmentHomeBinding.shimmerHome.setVisibility(View.GONE);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            fragmentHomeBinding.shimmerHome.stopShimmerAnimation();
+                                            fragmentHomeBinding.shimmerHome.setVisibility(View.GONE);
+                                            return false;
+                                        }
+                                    })
                                     .into(fragmentHomeBinding.imageviewHome);
-                            i=topicList.size();
+                            i = topicList.size();
                             break;
                         }
-                        if (Integer.parseInt(topicList.get(i).getChildtopic().get(j).getSotu()) > 0) {
+                        if (Integer.parseInt(topicList.get(i).getChildtopic().get(j).getSotu_chuahoc()) > 0) {
                             getChuahoc(account, topicList.get(i).getChildtopic().get(j).getChildtopic());
                             fragmentHomeBinding.topic.setText(topicList.get(i).getChildtopic().get(j).getChildtopic());
                             Glide.with(fragmentHomeBinding.getRoot())
                                     .load(topicList.get(i).getChildtopic().get(j).getImage())
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            fragmentHomeBinding.shimmerHome.stopShimmerAnimation();
+                                            fragmentHomeBinding.shimmerHome.setVisibility(View.GONE);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            fragmentHomeBinding.shimmerHome.stopShimmerAnimation();
+                                            fragmentHomeBinding.shimmerHome.setVisibility(View.GONE);
+                                            return false;
+                                        }
+                                    })
                                     .into(fragmentHomeBinding.imageviewHome);
-                            i=topicList.size();
+                            i = topicList.size();
                             break;
                         }
                     }

@@ -63,7 +63,7 @@ public class Fragment_learn extends Fragment {
         start_hoc = 0;
         next(start_hoc);
         fragmentLearnBinding.close.setOnClickListener(view -> {
-            share_revise.setValue_resive(reviseList);
+            share_revise.setValue_revise(reviseList);
             get_data();
             if(reviseList != null) {
                 NavController navController = Navigation.findNavController(fragmentLearnBinding.getRoot());
@@ -74,9 +74,9 @@ public class Fragment_learn extends Fragment {
             if (fragmentLearnBinding.Tiengviet1.getText().equals(hoc.get(start_hoc).getTiengviet())) {
                 fragmentLearnBinding.Tiengviet1.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 answer_true(account, hoc.get(start_hoc).getTienganh());
-                if (start_hoc < hoc.size() - 1) next(++start_hoc);
+                if (start_hoc < hoc.size()-1) next(++start_hoc);
                 else {
-                    share_revise.setValue_resive(reviseList);
+                    share_revise.setValue_revise(reviseList);
                     NavController navController = Navigation.findNavController(fragmentLearnBinding.getRoot());
                     navController.navigate(R.id.action_fragment_learn_to_fragment_finish);
                 }
@@ -91,9 +91,9 @@ public class Fragment_learn extends Fragment {
             if (fragmentLearnBinding.Tiengviet2.getText().equals(hoc.get(start_hoc).getTiengviet())) {
                 fragmentLearnBinding.Tiengviet2.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 answer_true(account, hoc.get(start_hoc).getTienganh());
-                if (start_hoc < hoc.size() - 1) next(++start_hoc);
+                if (start_hoc < hoc.size()-1) next(++start_hoc);
                 else {
-                    share_revise.setValue_resive(reviseList);
+                    share_revise.setValue_revise(reviseList);
                     NavController navController = Navigation.findNavController(fragmentLearnBinding.getRoot());
                     navController.navigate(R.id.action_fragment_learn_to_fragment_finish);
                 }
@@ -108,9 +108,9 @@ public class Fragment_learn extends Fragment {
             if (fragmentLearnBinding.Tiengviet3.getText().equals(hoc.get(start_hoc).getTiengviet())) {
                 fragmentLearnBinding.Tiengviet3.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 answer_true(account, hoc.get(start_hoc).getTienganh());
-                if (start_hoc < hoc.size() - 1) next(++start_hoc);
+                if (start_hoc < hoc.size()-1) next(++start_hoc);
                 else {
-                    share_revise.setValue_resive(reviseList);
+                    share_revise.setValue_revise(reviseList);
                     NavController navController = Navigation.findNavController(fragmentLearnBinding.getRoot());
                     navController.navigate(R.id.action_fragment_learn_to_fragment_finish);
                 }
@@ -125,9 +125,9 @@ public class Fragment_learn extends Fragment {
             if (fragmentLearnBinding.Tiengviet4.getText().equals(hoc.get(start_hoc).getTiengviet())) {
                 fragmentLearnBinding.Tiengviet4.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 answer_true(account, hoc.get(start_hoc).getTienganh());
-                if (start_hoc < hoc.size() - 1) next(++start_hoc);
+                if (start_hoc < hoc.size()-1) next(++start_hoc);
                 else {
-                    share_revise.setValue_resive(reviseList);
+                    share_revise.setValue_revise(reviseList);
                     NavController navController = Navigation.findNavController(fragmentLearnBinding.getRoot());
                     navController.navigate(R.id.action_fragment_learn_to_fragment_finish);
                 }
@@ -144,10 +144,9 @@ public class Fragment_learn extends Fragment {
 
     public void next(int k) {
         iscorrect = false;
-        int socau = k+1;
-        fragmentLearnBinding.socau.setText(k+"/"+hoc.size());
         if(k>0) {
             handler.postDelayed(() -> {
+                fragmentLearnBinding.socau.setText((k+1)+"/"+hoc.size());
                 enableImageview();
                 fragmentLearnBinding.textQuestion.setText(hoc.get(k).getTienganh());
                 arrayAnswer[0] = hoc.get(k).getTiengviet();
@@ -167,6 +166,7 @@ public class Fragment_learn extends Fragment {
             }, 750);
         }
         else {
+            fragmentLearnBinding.socau.setText((k+1)+"/"+hoc.size());
             enableImageview();
             fragmentLearnBinding.textQuestion.setText(hoc.get(k).getTienganh());
             arrayAnswer[0] = hoc.get(k).getTiengviet();

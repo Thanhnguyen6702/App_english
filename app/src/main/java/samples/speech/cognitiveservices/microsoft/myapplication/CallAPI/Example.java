@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public class Example {
-    @SerializedName("example")
     private List<String> example;
+    private String response;
     public Example(List<String> example) {
         this.example = example;
     }
@@ -18,5 +18,13 @@ public class Example {
 
     public void setExample(List<String> example) {
         this.example = example;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 }

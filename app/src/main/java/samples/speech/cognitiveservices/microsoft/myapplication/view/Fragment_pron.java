@@ -257,7 +257,7 @@ public class Fragment_pron extends Fragment {
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Example example) {
-                if (example.getExample() != null && !example.getExample().isEmpty()) {
+                if (example.getExample() != null && !example.getExample().isEmpty() && example.getResponse().equals(word) ) {
                     phatamcumtu.setVisibility(View.VISIBLE);
                     Text = example.getExample().get(0);
                 } else {

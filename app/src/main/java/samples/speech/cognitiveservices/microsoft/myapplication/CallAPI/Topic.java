@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Topic {
     String topic;
-    List<Subtopic> childtopic;
+    List<Subtopic> childtopics;
 
     public String getTopic() {
         return topic;
@@ -15,11 +15,11 @@ public class Topic {
     }
 
     public List<Subtopic> getChildtopic() {
-        return childtopic;
+        return childtopics;
     }
 
     public void setChildtopic(List<Subtopic> childtopic) {
-        this.childtopic = childtopic;
+        this.childtopics = childtopic;
     }
     public class Subtopic {
         String childtopic;

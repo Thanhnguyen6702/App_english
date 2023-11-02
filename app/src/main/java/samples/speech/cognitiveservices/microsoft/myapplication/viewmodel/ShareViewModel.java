@@ -1,5 +1,7 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.viewmodel;
 
+import android.util.Pair;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,6 +19,7 @@ public class ShareViewModel extends ViewModel {
     private final MutableLiveData<Detail_info> shareData_detail = new MutableLiveData<>();
     private final MutableLiveData<List<Value>> share_listValue = new MutableLiveData<>();
     private  final  MutableLiveData<List<Vocabulary>> share_chuahoc = new MutableLiveData<>();
+    private  final  MutableLiveData<Pair<String,List<Vocabulary>>> share_vocabulary = new MutableLiveData<>();
     private final MutableLiveData<List<Vocabulary>> share_phatam = new MutableLiveData<>();
     private final MutableLiveData<List<String>> share_sotuphatam = new MutableLiveData<>();
     private final MutableLiveData<Integer> nav = new MutableLiveData<>();
@@ -40,6 +43,12 @@ public class ShareViewModel extends ViewModel {
     }
     public LiveData<List<Vocabulary>> getchuahoc_phatam(){
         return share_chuahoc_phatam;
+    }
+    public void setShare_vocabulary(Pair<String,List<Vocabulary>> vocabulary){
+        share_vocabulary.setValue(vocabulary);
+    }
+    public LiveData<Pair<String,List<Vocabulary>>> getVocabulary(){
+        return share_vocabulary;
     }
     public void setNav(Integer id){
         nav.setValue(id);

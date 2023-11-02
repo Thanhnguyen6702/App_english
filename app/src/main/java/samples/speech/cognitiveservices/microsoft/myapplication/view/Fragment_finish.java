@@ -1,6 +1,7 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,16 +52,24 @@ public class Fragment_finish extends Fragment {
         share_revise = ((MainActivity) requireActivity()).getData_revise();
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
         get_data();
-        value_reviseList = share_revise.getValue_resive().getValue();
+        value_reviseList = share_revise.getValue_revise().getValue();
         TextView tuhoanthanh = view.findViewById(R.id.textView_finish1);
-        tuhoanthanh.setText("Chúc mừng bạn vừa hoàn thành thêm được "+value_reviseList.size()+" từ mới");
+        tuhoanthanh.setText("Chúc mừng bạn vừa hoàn thành thêm được "+value_reviseList.size()+" từ");
         finish_adapter = new Finish_Adapter(value_reviseList);
         recyclerView.setAdapter(finish_adapter);
         ImageView close = view.findViewById(R.id.close_finish);
         close.setOnClickListener(view1->{
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_fragment_finish_to_fragment_home);
-            share_revise.setValue_resive(null);
+            share_revise.setValue_revise(null);
+        });
+        button.setOnClickListener(view1 -> {
+            NavController navController = Navigation.findNavController(view);
+            if(button.getText().toString().equals("Tiếp tục ôn tập")){
+                navController.navigate(R.id.action_fragment_finish_to_fragment_learn);
+            }else {
+                navController.navigate(R.id.action_fragment_finish_to_fragment_home);
+            }
         });
         return view;
     }
@@ -68,7 +77,7 @@ public class Fragment_finish extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        share_revise.setValue_resive(null);
+        share_revise.setValue_revise(null);
     }
     public void get_data() {
         ApiService.apiService.getDetailInfo(shareViewModel.getData().getValue()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Detail_info>() {
@@ -90,7 +99,17 @@ public class Fragment_finish extends Fragment {
             @Override
             public void onComplete() {
                     button.setEnabled(true);
+                    checkData();
+                    share_revise.setValue_revise(null);
             }
         });
+    }
+    public  void checkData(){
+
+        if(shareViewModel.getData_detail().getValue().getHoc().size()>0){
+            button.setText("Tiếp tục ôn tập");
+        } else {
+            button.setText("Hoàn thành");
+        }
     }
 }
