@@ -180,6 +180,9 @@
         <action
             android:id="@+id/action_fragment_pratice2_to_fragment_practice"
             app:destination="@id/fragment_practice" />
+        <action
+            android:id="@+id/action_fragment_pratice2_to_fragment_quiz"
+            app:destination="@id/fragment_quiz" />
     </fragment>
     <fragment
         android:id="@+id/fragment_flashcard"
@@ -202,4 +205,36 @@
             android:id="@+id/action_layout_login_to_fragment_home"
             app:destination="@id/fragment_home" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_quiz"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_quiz"
+        android:label="Fragment_quiz"
+        tools:layout="@layout/fragment_quiz">
+        <action
+            android:id="@+id/action_fragment_quiz_to_fragment_pratice2"
+            app:destination="@id/fragment_pratice2" />
+        <action
+            android:id="@+id/action_fragment_quiz_to_fragment_quiz1"
+            app:destination="@id/fragment_quiz1" />
+        <action
+            android:id="@+id/action_fragment_quiz_to_fragment_quiz3"
+            app:destination="@id/fragment_quiz3" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_quiz1"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_quiz1"
+        android:label="Fragment_quiz1"
+        tools:layout="@layout/fragment_quiz1">
+        <action
+            android:id="@+id/action_fragment_quiz1_to_fragment_quiz"
+            app:destination="@id/fragment_quiz" />
+        <action
+            android:id="@+id/action_fragment_quiz1_to_fragment_quiz3"
+            app:destination="@id/fragment_quiz3" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_quiz3"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_quiz3"
+        android:label="Fragment_quiz3"
+        tools:layout="@layout/fragment_quiz3"/>
 </navigation>

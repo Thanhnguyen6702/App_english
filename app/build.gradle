@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'samples.speech.cognitiveservices.microsoft.myapplication'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "samples.speech.cognitiveservices.microsoft.myapplication"
@@ -35,7 +35,8 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
@@ -59,5 +60,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:2.4.0"
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
-
+    //Database
+    implementation "androidx.room:room-runtime:2.5.0"
+    annotationProcessor "androidx.room:room-compiler:2.6.0"
 }

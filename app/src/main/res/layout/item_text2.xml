@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/characterTextView"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:text="t"
+    android:textColor="@color/teal_200"
+    android:textStyle="bold"
+    android:gravity="center"
+    android:textSize="18sp"
+    android:background="@drawable/background_item_text2"
+    android:layout_margin="2dp"/>

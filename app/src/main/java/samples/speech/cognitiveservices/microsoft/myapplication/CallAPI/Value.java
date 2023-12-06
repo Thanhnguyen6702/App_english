@@ -9,6 +9,16 @@ public class Value {
     private String TiengViet;
     private String CheckDay;
 
+    public Byte getSound() {
+        return Sound;
+    }
+
+    public void setSound(Byte sound) {
+        Sound = sound;
+    }
+
+    private Byte Sound;
+
     public String getCheckday() {
         return CheckDay;
     }

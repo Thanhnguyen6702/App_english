@@ -66,8 +66,4 @@ public class MainActivity extends AppCompatActivity {
         return data_revise;
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
 }

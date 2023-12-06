@@ -68,6 +68,10 @@ public class Fragment_pratice2 extends Fragment {
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_fragment_pratice2_to_fragment_flashcard);
         });
+        luyentap.setOnClickListener(view1 -> {
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_fragment_pratice2_to_fragment_quiz);
+        });
         back.setOnClickListener(view1 -> {
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_fragment_pratice2_to_fragment_practice);
