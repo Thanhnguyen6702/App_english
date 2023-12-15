@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import samples.speech.cognitiveservices.microsoft.myapplication.Adapter.Fractice2_adapter;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
+import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 
 public class Fragment_pratice2 extends Fragment {
@@ -60,7 +61,7 @@ public class Fragment_pratice2 extends Fragment {
             thuthach.setEnabled(true);
             luyentap.setEnabled(true);
             title.setText(vocabularies.first);
-            Fractice2_adapter fractice2Adapter = new Fractice2_adapter(vocabularies.second);
+            Fractice2_adapter fractice2Adapter = new Fractice2_adapter(vocabularies.second, Sound.getInstance(requireContext()));
             recyclerView.setAdapter(fractice2Adapter);
         });
 
