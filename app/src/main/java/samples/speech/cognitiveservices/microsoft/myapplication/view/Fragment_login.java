@@ -90,8 +90,8 @@ public class Fragment_login extends Fragment {
                         fragmentLoginBinding.taikhoan.setError("Tài khoản hoặc mật khẩu không chính xác");
                         fragmentLoginBinding.matkhau.setError("Tài khoản hoặc mật khẩu không chính xác");
                         fragmentLoginBinding.buttonLogin.setEnabled(true);
-                        dialog.dismiss();
                     }
+                    dialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

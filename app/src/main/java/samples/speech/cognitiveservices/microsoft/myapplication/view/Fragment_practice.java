@@ -1,7 +1,6 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -22,10 +20,13 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import samples.speech.cognitiveservices.microsoft.myapplication.Adapter.Fractice_adapter;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Topic;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteTopic;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
-import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.Share_revise;
 
 public class Fragment_practice extends Fragment {
@@ -95,8 +96,16 @@ public class Fragment_practice extends Fragment {
         });
 
         recyclerView.setLayoutManager(layoutManager);
+        List<FavoriteTopic> favoriteTopicList = topic.getChildtopic().stream().map(subtopic->new FavoriteTopic(subtopic.getChildtopic(),subtopic.getImage())).collect(Collectors.toList());
 
-        Fractice_adapter fracticeAdapter = new Fractice_adapter(topic, view);
+        Fractice_adapter fracticeAdapter = new Fractice_adapter(view, new Fractice_adapter.ClickDetail() {
+            @Override
+            public void moveToFractice2() {
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_fragment_practice_to_fragment_pratice2);
+            }
+        });
+        fracticeAdapter.setData(favoriteTopicList);
         recyclerView.setAdapter(fracticeAdapter);
 
         return view;

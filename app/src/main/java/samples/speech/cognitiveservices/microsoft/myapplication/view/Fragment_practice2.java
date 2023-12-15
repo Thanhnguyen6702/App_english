@@ -17,12 +17,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import samples.speech.cognitiveservices.microsoft.myapplication.Adapter.Fractice2_adapter;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteTopic;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteVoca;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 
-public class Fragment_pratice2 extends Fragment {
+public class Fragment_practice2 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +66,8 @@ public class Fragment_pratice2 extends Fragment {
             thuthach.setEnabled(true);
             luyentap.setEnabled(true);
             title.setText(vocabularies.first);
-            Fractice2_adapter fractice2Adapter = new Fractice2_adapter(vocabularies.second, Sound.getInstance(requireContext()));
+            List<FavoriteVoca> listVocab = vocabularies.second.stream().map(vocabulary -> new FavoriteVoca(vocabulary.getTienganh(),vocabulary.getTiengviet(),vocabulary.getPhienam())).collect(Collectors.toList());
+            Fractice2_adapter fractice2Adapter = new Fractice2_adapter(listVocab, Sound.getInstance(requireContext()));
             recyclerView.setAdapter(fractice2Adapter);
         });
 
@@ -74,8 +80,7 @@ public class Fragment_pratice2 extends Fragment {
             navController.navigate(R.id.action_fragment_pratice2_to_fragment_quiz);
         });
         back.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_pratice2_to_fragment_practice);
+            Navigation.findNavController(view).popBackStack();
         });
         return  view;
     }

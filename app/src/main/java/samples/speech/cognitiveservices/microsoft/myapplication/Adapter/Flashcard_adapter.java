@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteVoca;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.VocabDatabase;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 
 public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Flashcard_viewholder> {
@@ -42,6 +44,26 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
         if (vocabulary.getExample() != null) {
             holder.example.setText(vocabulary.getExample().get(0));
         }
+        if(VocabDatabase.getInstance(holder.itemView.getContext()).daoVocab().checkVocab(vocabulary.getTienganh())>0){
+            holder.checkFavorite = true;
+            holder.favorite.setImageResource(R.drawable.like);
+        }
+        else {
+            holder.checkFavorite = false;
+            holder.favorite.setImageResource(R.drawable.unlike);
+        }
+        holder.favorite.setOnClickListener(view -> {
+            if(holder.checkFavorite){
+                holder.checkFavorite = false;
+                holder.favorite.setImageResource(R.drawable.unlike);
+                VocabDatabase.getInstance(holder.itemView.getContext()).daoVocab().removeTopic(vocabulary.getTienganh());
+            }
+            else {
+                holder.checkFavorite = true;
+                holder.favorite.setImageResource(R.drawable.like);
+                VocabDatabase.getInstance(holder.itemView.getContext()).daoVocab().insertTopic(new FavoriteVoca(vocabulary.getTienganh(),vocabulary.getTiengviet(),vocabulary.getPhienam()));
+            }
+        });
     }
 
     @Override
@@ -52,6 +74,7 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
     public static class Flashcard_viewholder extends RecyclerView.ViewHolder {
         TextView english_f, english_b, phonetic, vietnamese, example;
         ImageView favorite, volume;
+        Boolean checkFavorite;
 
         public Flashcard_viewholder(@NonNull View itemView) {
             super(itemView);
@@ -63,23 +86,23 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
             favorite = itemView.findViewById(R.id.favorite);
             volume = itemView.findViewById(R.id.volume_flashcard);
             itemView.setOnClickListener(view -> {
-                Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.flip_flashcard);
-                view.setAnimation(animation);
-                if (english_f.getVisibility() == View.VISIBLE) {
-                    english_f.setVisibility(View.GONE);
-                    english_b.setVisibility(View.VISIBLE);
-                    phonetic.setVisibility(View.VISIBLE);
-                    vietnamese.setVisibility(View.VISIBLE);
-                    example.setVisibility(View.VISIBLE);
-                    volume.setVisibility(View.VISIBLE);
-                } else {
-                    english_f.setVisibility(View.VISIBLE);
-                    english_b.setVisibility(View.GONE);
-                    phonetic.setVisibility(View.GONE);
-                    vietnamese.setVisibility(View.GONE);
-                    example.setVisibility(View.GONE);
-                    volume.setVisibility(View.GONE);
-                }
+                    Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.flip_flashcard);
+                    view.setAnimation(animation);
+                    if (english_f.getVisibility() == View.VISIBLE) {
+                        english_f.setVisibility(View.GONE);
+                        english_b.setVisibility(View.VISIBLE);
+                        phonetic.setVisibility(View.VISIBLE);
+                        vietnamese.setVisibility(View.VISIBLE);
+                        example.setVisibility(View.VISIBLE);
+                        volume.setVisibility(View.VISIBLE);
+                    } else {
+                        english_f.setVisibility(View.VISIBLE);
+                        english_b.setVisibility(View.GONE);
+                        phonetic.setVisibility(View.GONE);
+                        vietnamese.setVisibility(View.GONE);
+                        example.setVisibility(View.GONE);
+                        volume.setVisibility(View.GONE);
+                    }
             });
         }
     }

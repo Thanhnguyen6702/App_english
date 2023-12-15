@@ -156,6 +156,9 @@
         <action
             android:id="@+id/action_fragment_logout_to_fragment_login"
             app:destination="@id/fragment_login" />
+        <action
+            android:id="@+id/action_fragment_logout_to_fragment_favorite"
+            app:destination="@id/fragment_favorite" />
     </fragment>
     <fragment
         android:id="@+id/fragment_practice"
@@ -171,7 +174,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_pratice2"
-        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_pratice2"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_practice2"
         android:label="Fragment_pratice2"
         tools:layout="@layout/fragment_practice2">
         <action
@@ -237,4 +240,13 @@
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_quiz3"
         android:label="Fragment_quiz3"
         tools:layout="@layout/fragment_quiz3"/>
+    <fragment
+        android:id="@+id/fragment_favorite"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_favorite"
+        android:label="Fragment_favorite"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_fragment_favorite_to_fragment_pratice2"
+            app:destination="@id/fragment_pratice2" />
+    </fragment>
 </navigation>

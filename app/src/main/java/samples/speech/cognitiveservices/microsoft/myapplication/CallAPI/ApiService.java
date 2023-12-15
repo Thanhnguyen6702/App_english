@@ -76,4 +76,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("thanh/score_pron.php")
     Observable<Void> postScore(@Field("account") String account, @Field("word") String word, @Field("score") int score);
+
+    @GET("thanh/getSound.php")
+    Observable<ResponseBody> getSound(@Query("word") String word);
 }

@@ -12,12 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteVoca;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
+import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 
 public class Fractice2_adapter extends RecyclerView.Adapter<Fractice2_adapter.Fractice2_viewholder> {
-    List<Vocabulary> vocabularies;
-    public Fractice2_adapter(List<Vocabulary> vocabularies){
+    List<FavoriteVoca> vocabularies;
+    Sound sound;
+
+    public Fractice2_adapter(List<FavoriteVoca> vocabularies,Sound sound){
         this.vocabularies = vocabularies;
+        this.sound = sound;
     }
     @NonNull
     @Override
@@ -28,9 +33,10 @@ public class Fractice2_adapter extends RecyclerView.Adapter<Fractice2_adapter.Fr
 
     @Override
     public void onBindViewHolder(@NonNull Fractice2_viewholder holder, int position) {
-                holder.english.setText(vocabularies.get(position).getTienganh());
-                holder.phonetic.setText(vocabularies.get(position).getPhienam());
-                holder.vietnamese.setText(vocabularies.get(position).getTiengviet());
+                holder.english.setText(vocabularies.get(position).getEnglish());
+                holder.phonetic.setText(vocabularies.get(position).getPhonetic());
+                holder.vietnamese.setText(vocabularies.get(position).getVietnamese());
+                holder.volume.setOnClickListener(view -> sound.playAudio(vocabularies.get(position).getEnglish()));
     }
 
     @Override

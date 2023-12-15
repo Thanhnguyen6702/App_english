@@ -29,6 +29,7 @@ import samples.speech.cognitiveservices.microsoft.myapplication.Adapter.Quiz_abo
 import samples.speech.cognitiveservices.microsoft.myapplication.Adapter.Quiz_below_adapter;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
+import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 
 public class Fragment_quiz3 extends Fragment {
@@ -47,6 +48,7 @@ public class Fragment_quiz3 extends Fragment {
     private int  MAXQUIZ;
     char[] chars;
     int pos;
+    private Sound playAudio ;
 
     @Nullable
     @Override
@@ -57,6 +59,7 @@ public class Fragment_quiz3 extends Fragment {
         progressBar = view.findViewById(R.id.progress_quiz3);
         layoutGuess = view.findViewById(R.id.layout1_quiz3);
         layoutSound = view.findViewById(R.id.layout2_quiz3);
+        playAudio = Sound.getInstance(requireContext());
         InitLayoutGuessWord(view);
         InitLayoutGuessSound(view);
         StartQuiz();
@@ -82,6 +85,7 @@ public class Fragment_quiz3 extends Fragment {
             if (pos == chars.length) {
                 english.setVisibility(View.VISIBLE);
                 phonetic.setVisibility(View.VISIBLE);
+                playAudio.playAudio(english.getText().toString());
                 new Handler().postDelayed(() -> StartQuiz(), 2500);
             }
         });
@@ -111,7 +115,6 @@ public class Fragment_quiz3 extends Fragment {
         setClickTextview(english2);
         setClickTextview(english3);
         setClickTextview(english4);
-
     }
 
     private void StartQuiz() {
@@ -127,6 +130,8 @@ public class Fragment_quiz3 extends Fragment {
             String textEnglish = vocabularies.get(index).getTienganh();
             String textPhonetic = vocabularies.get(index).getPhienam();
             result.add(textEnglish);
+            playAudio.setWord(textEnglish);
+            sound.setOnClickListener(view -> playAudio.playAudio(textEnglish));
             vocabularyRandom.remove(vocabularies.get(index));
             Collections.shuffle(vocabularyRandom);
             result.add(vocabularyRandom.get(0).getTienganh());
@@ -174,6 +179,7 @@ public class Fragment_quiz3 extends Fragment {
             if (textview.getText().toString().equals(result)) {
                 textview.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
                 textview.setEnabled(false);
+                playAudio.playAudio(result);
                 new Handler().postDelayed(() -> StartQuiz(),750);
             } else {
                 textview.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));

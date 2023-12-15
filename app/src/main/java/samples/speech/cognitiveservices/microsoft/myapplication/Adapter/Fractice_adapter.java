@@ -29,21 +29,29 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.ApiService;
-import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Topic;
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteTopic;
+import samples.speech.cognitiveservices.microsoft.myapplication.Database.TopicDatabase;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.view.MainActivity;
 import samples.speech.cognitiveservices.microsoft.myapplication.viewmodel.ShareViewModel;
 
 public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Fractice_viewHolder> {
-    Topic topic;
+    List<FavoriteTopic> topicList;
     ShareViewModel shareViewModel;
-
-    public Fractice_adapter(Topic topic, View view) {
-        this.topic = topic;
+    View view;
+    public interface ClickDetail{
+        void moveToFractice2();
+    }
+    ClickDetail clickDetail;
+    public Fractice_adapter(View view,ClickDetail clickDetail) {
+        this.view = view;
+        this.clickDetail = clickDetail;
         shareViewModel = ((MainActivity) view.getContext()).getData_login();
     }
-
+    public void setData(List<FavoriteTopic> topicList){
+        this.topicList = topicList;
+    }
     @NonNull
     @Override
     public Fractice_viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,7 +64,7 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
         holder.shimmerFrameLayout.startShimmerAnimation();
         holder.shimmerFrameLayout.setVisibility(View.VISIBLE);
         Glide.with(holder.imgTopic)
-                .load(topic.getChildtopic().get(position).getImage())
+                .load(topicList.get(position).getImage())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -75,18 +83,24 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
                     }
                 })
                 .into(holder.imgTopic);
-        holder.textTopic.setText(topic.getChildtopic().get(position).getChildtopic());
-        holder.favorite.setOnClickListener(view -> holder.favorite.setImageResource(R.drawable.like));
+        holder.textTopic.setText(topicList.get(position).getTopic());
+        if(TopicDatabase.getInstance(view.getContext()).daoTopic().checkTopic(topicList.get(position).getTopic())>0){
+            holder.favorite.setImageResource(R.drawable.like);
+            holder.checkFavorite = true;
+        }else {
+            holder.favorite.setImageResource(R.drawable.unlike);
+            holder.checkFavorite = false;
+        }
+        holder.favorite.setOnClickListener(view -> holder.setFavorite(holder.favorite,topicList.get(position)));
         holder.detail.setOnClickListener(view -> {
-            getVocabulary(topic.getChildtopic().get(position).getChildtopic());
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_practice_to_fragment_pratice2);
+            getVocabulary(topicList.get(position).getTopic());
+            clickDetail.moveToFractice2();
         });
     }
 
     @Override
     public int getItemCount() {
-        return topic.getChildtopic().size();
+        return topicList.size();
     }
 
     public static class Fractice_viewHolder extends RecyclerView.ViewHolder {
@@ -95,6 +109,7 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
         ImageView favorite;
         ShimmerFrameLayout shimmerFrameLayout;
         Button detail;
+        Boolean checkFavorite ;
 
         public Fractice_viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,9 +119,20 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
             detail = itemView.findViewById(R.id.detail_practice);
             shimmerFrameLayout = itemView.findViewById(R.id.shimmer_practice);
         }
+        private void setFavorite(ImageView imageView, FavoriteTopic topic){
+            if(!checkFavorite){
+                imageView.setImageResource(R.drawable.like);
+                TopicDatabase.getInstance(itemView.getContext()).daoTopic().insertTopic(topic);
+            }
+            else {
+                imageView.setImageResource(R.drawable.unlike);
+                TopicDatabase.getInstance(imageView.getContext()).daoTopic().removeTopic(topic.getTopic());
+            }
+            checkFavorite = !checkFavorite;
+        }
     }
 
-    public void getVocabulary(String topic) {
+    private void getVocabulary(String topic) {
         ApiService.apiService.getVocabulary(topic).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Vocabulary>>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
@@ -130,4 +156,5 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
             }
         });
     }
+
 }
