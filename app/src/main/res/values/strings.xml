@@ -3,4 +3,6 @@
     <string name="tieng_viet">Tiếng việt</string>
     <string name="tieng_anh">Tiếng Anh</string>
     <string name="default_button">Ôn tập</string>
+    <string name="accessibility_service_description">Accessibility Service Example</string>
+    <string name="accessibility_service_label">Add</string>
 </resources>

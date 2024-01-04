@@ -2,6 +2,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.AlignItems;
@@ -42,24 +45,28 @@ public class Fragment_quiz3 extends Fragment {
 
     TextView english, phonetic, topic, english1, english2, english3, english4;
     ProgressBar progressBar;
-    ImageView sound;
-    View layoutSound,layoutGuess;
+    ImageView sound, back;
+    View layoutSound,layoutGuess,rootView;
     private int start = 0;
     private int  MAXQUIZ;
     char[] chars;
     int pos;
+    int numberTrue = 0;
     private Sound playAudio ;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz3, container, false);
+        rootView = view;
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
         MAXQUIZ = shareViewModel.getSotuquiz3().getValue();
         progressBar = view.findViewById(R.id.progress_quiz3);
         layoutGuess = view.findViewById(R.id.layout1_quiz3);
         layoutSound = view.findViewById(R.id.layout2_quiz3);
         playAudio = Sound.getInstance(requireContext());
+        back = view.findViewById(R.id.back_quiz3);
+        back.setOnClickListener(view1 -> Navigation.findNavController(view).popBackStack());
         InitLayoutGuessWord(view);
         InitLayoutGuessSound(view);
         StartQuiz();
@@ -72,9 +79,19 @@ public class Fragment_quiz3 extends Fragment {
         topic = view.findViewById(R.id.title_quiz3);
         vocabularies = shareViewModel.getVocabulary().getValue().second;
         topic.setText(shareViewModel.getVocabulary().getValue().first);
-        quizAboveAdapter = new Quiz_above_adapter(p -> {
-            pos = p;
-            quizAboveAdapter.setData(chars, pos);
+        quizAboveAdapter = new Quiz_above_adapter(new Quiz_above_adapter.ItemClick() {
+            @Override
+            public void charaterClick(int p) {
+                pos = p;
+                quizAboveAdapter.setData(chars, pos);
+            }
+
+            @Override
+            public void result(boolean result) {
+                if (result){
+                    numberTrue++;
+                }
+            }
         });
         quizBelowAdapter = new Quiz_below_adapter(c -> {
             if (pos < chars.length) {
@@ -82,7 +99,8 @@ public class Fragment_quiz3 extends Fragment {
                 pos++;
                 quizAboveAdapter.setData(chars, pos);
             }
-            if (pos == chars.length) {
+            if (pos == chars.length){
+                pos++;
                 english.setVisibility(View.VISIBLE);
                 phonetic.setVisibility(View.VISIBLE);
                 playAudio.playAudio(english.getText().toString());
@@ -153,6 +171,12 @@ public class Fragment_quiz3 extends Fragment {
             phonetic.setVisibility(View.GONE);
             start++;
         }
+        else {
+            int numberFalse = MAXQUIZ - numberTrue;
+            Log.e("loi",MAXQUIZ+" "+numberFalse);
+            NavDirections action = Fragment_quiz3Directions.actionFragmentQuiz3ToResultQuiz3(numberTrue,numberFalse);
+            Navigation.findNavController(rootView).navigate(action);
+        }
     }
 
 
@@ -169,25 +193,34 @@ public class Fragment_quiz3 extends Fragment {
         return chars;
     }
 
-    public void disableImageview(View view) {
-        new Handler().postDelayed(() -> view.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_disable)), 500);
-    }
+
 
     private void setClickTextview(TextView textview) {
         textview.setOnClickListener(view1 -> {
             String result = vocabularies.get(start-1).getTienganh();
             if (textview.getText().toString().equals(result)) {
+                numberTrue++;
                 textview.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
-                textview.setEnabled(false);
-                playAudio.playAudio(result);
-                new Handler().postDelayed(() -> StartQuiz(),750);
             } else {
                 textview.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_false));
-                disableImageview(view1);
-                textview.setEnabled(false);
+                showAnswerTrue(result);
             }
-
+            disableTextview();
+            playAudio.playAudio(result);
+            new Handler().postDelayed(() -> StartQuiz(),750);
         });
+    }
+
+    private void showAnswerTrue(String result) {
+        if (english1.getText().toString().equals(result)){
+            english1.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
+        } else if (english2.getText().toString().equals(result)){
+            english2.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
+        } else if (english3.getText().toString().equals(result)){
+            english4.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
+        } else if (english4.getText().toString().equals(result)){
+            english4.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.button_true));
+        }
     }
 
     public void setButton() {
@@ -210,5 +243,11 @@ public class Fragment_quiz3 extends Fragment {
             view2.setVisibility(View.VISIBLE);
             view1.setVisibility(View.GONE);
         }
+    }
+    private void disableTextview(){
+        english1.setEnabled(false);
+        english2.setEnabled(false);
+        english3.setEnabled(false);
+        english4.setEnabled(false);
     }
 }

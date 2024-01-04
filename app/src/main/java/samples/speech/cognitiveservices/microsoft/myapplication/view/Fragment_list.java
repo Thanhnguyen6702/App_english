@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -41,6 +43,9 @@ public class Fragment_list extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentListBinding = FragmentListBinding.inflate(inflater, container, false);
         fragmentListBinding.setFragmentList(new Fragment_list_ViewModel());
+        BottomNavigationView bottomnav = requireActivity().findViewById(R.id.nav_bottom);
+        bottomnav.setVisibility(View.VISIBLE);
+        bottomnav.setSelectedItemId(R.id.action_collection);
         data = ((MainActivity) requireActivity()).getData_revise();
         Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

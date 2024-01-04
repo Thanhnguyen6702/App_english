@@ -44,8 +44,7 @@ public class Fragment_quiz1 extends Fragment {
         gridviewAdapter.setData(shareViewModel.getVocabulary().getValue().second);
         gridView.setAdapter(gridviewAdapter);
         back.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_quiz1_to_fragment_quiz);
+            Navigation.findNavController(view).popBackStack();
         });
         btConfirm.setOnClickListener(view1 -> {
                 List<Vocabulary> newVocabularies = shareViewModel.getVocabulary().getValue().second;

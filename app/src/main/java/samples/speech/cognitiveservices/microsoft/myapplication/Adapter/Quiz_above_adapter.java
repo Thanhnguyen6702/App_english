@@ -3,6 +3,7 @@ package samples.speech.cognitiveservices.microsoft.myapplication.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,17 @@ public class Quiz_above_adapter extends RecyclerView.Adapter<Quiz_above_adapter.
     }
     public interface ItemClick{
         void charaterClick(int p);
+        void result(boolean result);
     }
     @SuppressLint("NotifyDataSetChanged")
     public void setData(char[] words, int pos){
         this.words = words;
         this.pos = pos;
+        if(pos == words.length){
+            if(String.valueOf(words).equals(String.valueOf(words_correct))){
+                itemClick.result(true);
+            }
+        }
         notifyDataSetChanged();
     }
     public void setWords_correct(char[] words_correct){

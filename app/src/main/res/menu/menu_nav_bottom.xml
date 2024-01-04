@@ -13,6 +13,10 @@
         android:id="@+id/action_collection"
         android:icon="@drawable/action_collection" />
     <item
+        android:title="Favorite"
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/action_favorite"/>
+    <item
         android:title="Setting"
         android:id="@+id/action_setting"
         android:icon="@drawable/action_setting" />

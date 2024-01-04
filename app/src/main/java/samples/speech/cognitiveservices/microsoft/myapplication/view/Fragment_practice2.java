@@ -79,6 +79,10 @@ public class Fragment_practice2 extends Fragment {
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_fragment_pratice2_to_fragment_quiz);
         });
+        thuthach.setOnClickListener(view1 -> {
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_fragment_pratice2_to_fragment_Challenge);
+        });
         back.setOnClickListener(view1 -> {
             Navigation.findNavController(view).popBackStack();
         });

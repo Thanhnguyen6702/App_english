@@ -19,18 +19,18 @@
             app:popUpTo="@id/fragment_login"
             app:popUpToInclusive="false"
             app:popUpToSaveState="true"
-            app:restoreState="true"/>
+            app:restoreState="true" />
         <action
             android:id="@+id/action_fragment_login_to_fragment_home"
             app:destination="@id/fragment_home"
             app:popUpTo="@id/fragment_login"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragment_signup"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_signup"
         android:label="Fragment_signup"
-        tools:layout="@layout/fragment_signup"/>
+        tools:layout="@layout/fragment_signup" />
     <fragment
         android:id="@+id/fragment_home"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_home"
@@ -43,7 +43,7 @@
             android:id="@+id/action_fragment_home_to_fragment_study"
             app:destination="@id/fragment_study"
             app:popUpTo="@layout/fragment_home"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_home_to_fragment_topic"
             app:destination="@id/fragment_topic" />
@@ -59,13 +59,19 @@
     </fragment>
     <action
         android:id="@+id/action_activitymain_to_fragment_home"
-        app:destination="@+id/fragment_home"/>
+        app:destination="@+id/fragment_home" />
     <action
         android:id="@+id/action_activitymain_to_fragment_list"
-        app:destination="@+id/fragment_list"/>
+        app:destination="@+id/fragment_list" />
+    <action
+        android:id="@+id/action_activitymain_to_fragment_favorite"
+        app:destination="@+id/fragment_favorite" />
     <action
         android:id="@+id/action_activitymain_to_fragment_logout"
-        app:destination="@id/fragment_logout"/>
+        app:destination="@id/fragment_logout" />
+    <action
+        android:id="@+id/action_activitymain_to_fragment_challenge"
+        app:destination="@id/fragment_Challenge" />
     <fragment
         android:id="@+id/fragment_voice"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_pron"
@@ -101,7 +107,7 @@
             android:id="@+id/action_fragment_study_to_fragment_finish"
             app:destination="@+id/fragment_finish"
             app:popUpTo="@layout/fragment_study"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragment_study2"
@@ -156,9 +162,6 @@
         <action
             android:id="@+id/action_fragment_logout_to_fragment_login"
             app:destination="@id/fragment_login" />
-        <action
-            android:id="@+id/action_fragment_logout_to_fragment_favorite"
-            app:destination="@id/fragment_favorite" />
     </fragment>
     <fragment
         android:id="@+id/fragment_practice"
@@ -186,6 +189,9 @@
         <action
             android:id="@+id/action_fragment_pratice2_to_fragment_quiz"
             app:destination="@id/fragment_quiz" />
+        <action
+            android:id="@+id/action_fragment_pratice2_to_fragment_Challenge"
+            app:destination="@id/fragment_Challenge" />
     </fragment>
     <fragment
         android:id="@+id/fragment_flashcard"
@@ -239,7 +245,13 @@
         android:id="@+id/fragment_quiz3"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_quiz3"
         android:label="Fragment_quiz3"
-        tools:layout="@layout/fragment_quiz3"/>
+        tools:layout="@layout/fragment_quiz3">
+        <action
+            android:id="@+id/action_fragment_quiz3_to_result_quiz3"
+            app:destination="@id/result_quiz3"
+            app:popUpTo="@layout/fragment_quiz3"
+            app:popUpToInclusive="true"></action>
+    </fragment>
     <fragment
         android:id="@+id/fragment_favorite"
         android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_favorite"
@@ -248,5 +260,32 @@
         <action
             android:id="@+id/action_fragment_favorite_to_fragment_pratice2"
             app:destination="@id/fragment_pratice2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Challenge"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Fragment_Challenge"
+        android:label="Fragment_Challenge"
+        tools:layout="@layout/fragment_challenge" />
+    <fragment
+        android:id="@+id/result_quiz3"
+        android:name="samples.speech.cognitiveservices.microsoft.myapplication.view.Result_quiz3"
+        android:label="Result_challenge"
+        tools:layout="@layout/result_quiz3">
+        <argument
+            android:name="numberTrue"
+            app:argType="integer" />
+        <argument
+            android:name="numberFalse"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_result_quiz3_to_fragment_quiz3"
+            app:destination="@id/fragment_quiz3"
+            app:popUpTo="@layout/result_quiz3"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_result_quiz3_to_fragment_pratice2"
+            app:destination="@id/fragment_pratice2"
+            app:popUpTo="@layout/result_quiz3"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

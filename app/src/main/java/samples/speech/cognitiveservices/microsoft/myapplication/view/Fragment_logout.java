@@ -27,13 +27,9 @@ public class Fragment_logout extends Fragment {
         View view = inflater.inflate(R.layout.fragment_logout,container,false);
         BottomNavigationView bottomnav = requireActivity().findViewById(R.id.nav_bottom);
         bottomnav.setVisibility(View.VISIBLE);
+        bottomnav.setSelectedItemId(R.id.action_setting);
         TextView textView = view.findViewById(R.id.text_tk);
         Button button = view.findViewById(R.id.button_logout);
-        ImageView imageView = view.findViewById(R.id.favoriteImg);
-        imageView.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_logout_to_fragment_favorite);
-        });
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         textView.setText("Tài khoản: "+sharedPreferences.getString("account",""));

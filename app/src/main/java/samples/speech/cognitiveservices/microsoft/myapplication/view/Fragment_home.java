@@ -55,6 +55,7 @@ public class Fragment_home extends Fragment {
         fragmentHomeBinding.setFragmentHomeViewModel(fragment_home_viewModel);
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_bottom);
         bottomNavigationView.setVisibility(View.VISIBLE);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
         chua_hoc = ((MainActivity) requireActivity()).getData_revise();
         account = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);

@@ -42,8 +42,8 @@ public class Fragment_quiz extends Fragment {
             title.setText(vocabularies.first);
         });
         back.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_quiz_to_fragment_pratice2);
+            Navigation.findNavController(view).popBackStack();
+
         });
         chooseWord.setOnClickListener(view1 -> {
             NavController navController = Navigation.findNavController(view);

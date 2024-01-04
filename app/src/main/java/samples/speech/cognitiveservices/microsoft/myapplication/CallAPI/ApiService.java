@@ -23,7 +23,7 @@ public interface ApiService {
             .retryOnConnectionFailure(true)
             .addInterceptor(httpinterceptor);
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("https://thanhhust.x10.mx/")
+            .baseUrl("http://thanhhust.x10.mx/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okBuilder.build())

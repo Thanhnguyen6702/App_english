@@ -37,6 +37,9 @@ public class Framgent_phatam extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.topic_pronun, container, false);
+        BottomNavigationView bottomnav = requireActivity().findViewById(R.id.nav_bottom);
+        bottomnav.setVisibility(View.VISIBLE);
+        bottomnav.setSelectedItemId(R.id.action_voice);
         shareViewModel = ((MainActivity) requireActivity()).getData_login();
         buttonhoc = view.findViewById(R.id.tieptuchoc);
         sotudahoc = view.findViewById(R.id.sotuphatam);

@@ -52,8 +52,7 @@ public class Fragment_practice extends Fragment {
         int size = topic.getChildtopic().size();
         currentTopic.setText("1/"+size);
         back.setOnClickListener(view1 -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_fragment_practice_to_fragment_list);
+            Navigation.findNavController(view).popBackStack();
             bottomNavigationView.setVisibility(View.VISIBLE);
         });
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()){

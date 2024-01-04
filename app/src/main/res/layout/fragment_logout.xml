@@ -23,12 +23,5 @@
         android:padding="15dp"
         android:textColor="@color/black_100"
         android:textAllCaps="false"/>
-    <ImageView
-        android:id="@+id/favoriteImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/like"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

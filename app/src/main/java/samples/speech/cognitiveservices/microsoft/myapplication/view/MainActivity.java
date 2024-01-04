@@ -1,5 +1,6 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         data_login = new ViewModelProvider(this).get(ShareViewModel.class);
         data_revise = new ViewModelProvider(this).get(Share_revise.class);
-        mainBinding.navBottom.setOnItemSelectedListener(item -> {
+            mainBinding.navBottom.setOnItemSelectedListener(item -> {
             int i = item.getItemId();
             NavController navController = Navigation.findNavController(MainActivity.this, R.id.fragmentContainerView);
             int currentDestinationId = navController.getCurrentDestination().getId();
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (i == R.id.action_voice) {
                 if (currentDestinationId != R.id.fragment_phatam) {
                     navController.navigate(R.id.action_activitymain_to_fragment_phatam);
+                }
+                return true;
+            } else if (i == R.id.action_favorite) {
+                if (currentDestinationId != R.id.fragment_favorite) {
+                    navController.navigate(R.id.action_activitymain_to_fragment_favorite);
                 }
                 return true;
             } else {

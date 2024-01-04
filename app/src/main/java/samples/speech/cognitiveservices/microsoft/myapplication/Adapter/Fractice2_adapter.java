@@ -13,6 +13,7 @@ import java.util.List;
 
 import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabulary;
 import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteVoca;
+import samples.speech.cognitiveservices.microsoft.myapplication.Dialog.DialogPron;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
 import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 
@@ -37,6 +38,10 @@ public class Fractice2_adapter extends RecyclerView.Adapter<Fractice2_adapter.Fr
                 holder.phonetic.setText(vocabularies.get(position).getPhonetic());
                 holder.vietnamese.setText(vocabularies.get(position).getVietnamese());
                 holder.volume.setOnClickListener(view -> sound.playAudio(vocabularies.get(position).getEnglish()));
+                holder.mic.setOnClickListener(view -> {
+                    DialogPron dialogPron = new DialogPron(holder.itemView.getContext());
+                    dialogPron.show();
+                });
     }
 
     @Override
