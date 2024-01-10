@@ -1,8 +1,11 @@
 package samples.speech.cognitiveservices.microsoft.myapplication.Adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,27 +24,31 @@ public class Fractice2_adapter extends RecyclerView.Adapter<Fractice2_adapter.Fr
     List<FavoriteVoca> vocabularies;
     Sound sound;
 
-    public Fractice2_adapter(List<FavoriteVoca> vocabularies,Sound sound){
+    public Fractice2_adapter(List<FavoriteVoca> vocabularies, Sound sound) {
         this.vocabularies = vocabularies;
         this.sound = sound;
     }
+
     @NonNull
     @Override
     public Fractice2_viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pratice2,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pratice2, parent, false);
         return new Fractice2_viewholder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Fractice2_viewholder holder, int position) {
-                holder.english.setText(vocabularies.get(position).getEnglish());
-                holder.phonetic.setText(vocabularies.get(position).getPhonetic());
-                holder.vietnamese.setText(vocabularies.get(position).getVietnamese());
-                holder.volume.setOnClickListener(view -> sound.playAudio(vocabularies.get(position).getEnglish()));
-                holder.mic.setOnClickListener(view -> {
-                    DialogPron dialogPron = new DialogPron(holder.itemView.getContext());
-                    dialogPron.show();
-                });
+        holder.english.setText(vocabularies.get(position).getEnglish());
+        holder.phonetic.setText(vocabularies.get(position).getPhonetic());
+        holder.vietnamese.setText(vocabularies.get(position).getVietnamese());
+        holder.volume.setOnClickListener(view -> sound.playAudio(vocabularies.get(position).getEnglish()));
+        DialogPron dialogPron = new DialogPron(holder.itemView.getContext());
+        dialogPron.setData(vocabularies.get(position).getEnglish(), vocabularies.get(position).getPhonetic());
+     //   dialogPron.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        holder.mic.setOnClickListener(view -> {
+            dialogPron.show();
+        });
+
     }
 
     @Override
@@ -50,8 +57,9 @@ public class Fractice2_adapter extends RecyclerView.Adapter<Fractice2_adapter.Fr
     }
 
     public static class Fractice2_viewholder extends RecyclerView.ViewHolder {
-        TextView english,phonetic,vietnamese;
-        ImageView volume,mic;
+        TextView english, phonetic, vietnamese;
+        ImageView volume, mic;
+
         public Fractice2_viewholder(@NonNull View itemView) {
             super(itemView);
             english = itemView.findViewById(R.id.english_practice2);

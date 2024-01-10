@@ -41,7 +41,7 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
         holder.english_b.setText(vocabulary.getTienganh());
         holder.phonetic.setText(vocabulary.getPhienam());
         holder.vietnamese.setText(vocabulary.getTiengviet());
-        if (vocabulary.getExample() != null) {
+        if (vocabulary.getExample().size() >0) {
             holder.example.setText(vocabulary.getExample().get(0));
         }
         if(VocabDatabase.getInstance(holder.itemView.getContext()).daoVocab().checkVocab(vocabulary.getTienganh())>0){

@@ -86,6 +86,7 @@ public class Fragment_pron extends Fragment {
     List<Vocabulary> vocabularies = new ArrayList<>();
     String Text, tieng_anh;
     int start = 0;
+    boolean isNetwork = false;
     SpeechConfig speechConfig;
     private MicrophoneStream microphoneStream;
 
@@ -206,25 +207,27 @@ public class Fragment_pron extends Fragment {
         head_phone.setOnClickListener(view1 -> {
             playAudio(filePath);
         });
-        Boolean isconnect = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest networkRequest = new NetworkRequest.Builder().build();
         ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(@NonNull Network network) {
-                getActivity().runOnUiThread(() -> record());
+                isNetwork = true;
             }
 
             @Override
             public void onLost(@NonNull Network network) {
-                if (!isconnect) {
-                    getActivity().runOnUiThread(() -> stoprecord());
-
-                    Toast.makeText(getContext(), "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
-                }
+                isNetwork = false;
+                getActivity().runOnUiThread(() -> stoprecord());
+                Toast.makeText(getContext(), "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
             }
         };
-        mic.setOnClickListener(view1 -> connectivityManager.registerNetworkCallback(networkRequest, networkCallback));
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
+        mic.setOnClickListener(view1 -> {
+            if(isNetwork){
+                getActivity().runOnUiThread(() -> record());
+            }
+        });
 
         return view;
     }
@@ -257,7 +260,7 @@ public class Fragment_pron extends Fragment {
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Example example) {
-                if (example.getExample() != null && !example.getExample().isEmpty() && example.getResponse().equals(word) ) {
+                if (example.getExample() != null && !example.getExample().isEmpty() && example.getResponse().equals(word)) {
                     phatamcumtu.setVisibility(View.VISIBLE);
                     Text = example.getExample().get(0);
                 } else {
@@ -339,8 +342,9 @@ public class Fragment_pron extends Fragment {
             public void run() {
                 text_to_voice.voice(textboy.getText().toString(), "vi-VN");
             }
-        },100);
+        }, 100);
     }
+
     public void record() {
         Handler handler = new Handler();
         Runnable runnable = () -> mic.performClick();
@@ -418,7 +422,7 @@ public class Fragment_pron extends Fragment {
                             public void run() {
                                 text_to_voice.voice("Vui lòng phát âm lại!", "vi-VN");
                             }
-                        },100);
+                        }, 100);
                     });
 
                 }

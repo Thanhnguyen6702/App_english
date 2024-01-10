@@ -136,6 +136,7 @@ public class Fractice_adapter extends RecyclerView.Adapter<Fractice_adapter.Frac
         ApiService.apiService.getVocabulary(topic).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Vocabulary>>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                shareViewModel.setShare_vocabulary(null);
 
             }
 

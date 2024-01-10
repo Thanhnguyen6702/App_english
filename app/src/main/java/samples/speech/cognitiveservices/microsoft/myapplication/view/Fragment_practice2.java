@@ -17,6 +17,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,9 @@ public class Fragment_practice2 extends Fragment {
         View view;
         LinearLayout flashcard,thuthach,luyentap;
         view = inflater.inflate(R.layout.fragment_practice2,container,false);
+        ShimmerFrameLayout shimmerFrameLayout = view.findViewById(R.id.shimmer_practice2);
+        shimmerFrameLayout.startShimmerAnimation();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
         TextView title = view.findViewById(R.id.title_practice2);
         flashcard = view.findViewById(R.id.item_flashcard);
         thuthach = view.findViewById(R.id.item_thuthach);
@@ -62,13 +67,17 @@ public class Fragment_practice2 extends Fragment {
             }
         });
         shareViewModel.getVocabulary().observe(getViewLifecycleOwner(),vocabularies -> {
-            flashcard.setEnabled(true);
-            thuthach.setEnabled(true);
-            luyentap.setEnabled(true);
-            title.setText(vocabularies.first);
-            List<FavoriteVoca> listVocab = vocabularies.second.stream().map(vocabulary -> new FavoriteVoca(vocabulary.getTienganh(),vocabulary.getTiengviet(),vocabulary.getPhienam())).collect(Collectors.toList());
-            Fractice2_adapter fractice2Adapter = new Fractice2_adapter(listVocab, Sound.getInstance(requireContext()));
-            recyclerView.setAdapter(fractice2Adapter);
+            if(vocabularies != null) {
+                shimmerFrameLayout.stopShimmerAnimation();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                flashcard.setEnabled(true);
+                thuthach.setEnabled(true);
+                luyentap.setEnabled(true);
+                title.setText(vocabularies.first);
+                List<FavoriteVoca> listVocab = vocabularies.second.stream().map(vocabulary -> new FavoriteVoca(vocabulary.getTienganh(), vocabulary.getTiengviet(), vocabulary.getPhienam())).collect(Collectors.toList());
+                Fractice2_adapter fractice2Adapter = new Fractice2_adapter(listVocab, Sound.getInstance(requireContext()));
+                recyclerView.setAdapter(fractice2Adapter);
+            }
         });
 
         flashcard.setOnClickListener(view1 -> {
