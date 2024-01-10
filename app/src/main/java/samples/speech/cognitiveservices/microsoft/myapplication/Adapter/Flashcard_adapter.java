@@ -17,10 +17,11 @@ import samples.speech.cognitiveservices.microsoft.myapplication.CallAPI.Vocabula
 import samples.speech.cognitiveservices.microsoft.myapplication.Database.FavoriteVoca;
 import samples.speech.cognitiveservices.microsoft.myapplication.Database.VocabDatabase;
 import samples.speech.cognitiveservices.microsoft.myapplication.R;
+import samples.speech.cognitiveservices.microsoft.myapplication.Speech.Sound;
 
 public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Flashcard_viewholder> {
     List<Vocabulary> vocabularies;
-
+    Sound playAudio;
     public Flashcard_adapter(List<Vocabulary> vocabularies) {
         this.vocabularies = vocabularies;
     }
@@ -31,6 +32,7 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flashcard, parent, false);
         Flashcard_viewholder viewholder = new Flashcard_viewholder(view);
         viewholder.setIsRecyclable(false);
+        playAudio = Sound.getInstance(view.getContext());
         return viewholder;
     }
 
@@ -44,6 +46,9 @@ public class Flashcard_adapter extends RecyclerView.Adapter<Flashcard_adapter.Fl
         if (vocabulary.getExample().size() >0) {
             holder.example.setText(vocabulary.getExample().get(0));
         }
+        holder.volume.setOnClickListener(view -> {
+                playAudio.playAudio(vocabularies.get(position).getTienganh());
+        });
         if(VocabDatabase.getInstance(holder.itemView.getContext()).daoVocab().checkVocab(vocabulary.getTienganh())>0){
             holder.checkFavorite = true;
             holder.favorite.setImageResource(R.drawable.like);

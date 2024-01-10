@@ -116,16 +116,17 @@ public class Fragment_Challenge extends Fragment {
             String textVietnamese = vocabularies.get(start).getTiengviet();
             String textEnglish = vocabularies.get(start).getTienganh();
             String textPhonetic = vocabularies.get(start).getPhienam();
-            playAudio.setWord(textVietnamese);
             sound.setOnClickListener(view -> playAudio.playAudio(textEnglish));
             vocabularyRandom.remove(vocabularies.get(start));
             Collections.shuffle(vocabularyRandom);
             if (isSound) {
+                playAudio.playAudio(textEnglish);
                 result.add(textEnglish);
                 result.add(vocabularyRandom.get(0).getTienganh());
                 result.add(vocabularyRandom.get(1).getTienganh());
                 result.add(vocabularyRandom.get(2).getTienganh());
             } else {
+                playAudio.setWord(textEnglish);
                 result.add(textVietnamese);
                 result.add(vocabularyRandom.get(0).getTiengviet());
                 result.add(vocabularyRandom.get(1).getTiengviet());

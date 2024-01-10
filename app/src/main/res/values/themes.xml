@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/teal_200</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/teal_200</item>
+        <item name="android:colorControlHighlight">@color/teal_50</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="DialogAnimation">
