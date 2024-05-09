@@ -41,6 +41,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.microsoft.cognitiveservices.speech.KeywordRecognitionModel;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentConfig;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentGradingSystem;
 import com.microsoft.cognitiveservices.speech.PronunciationAssessmentGranularity;
@@ -111,7 +112,7 @@ public class Fragment_pron extends Fragment {
         filePath = getContext().getExternalFilesDir(null).getAbsolutePath() + "/record.wav";
         // create config
         speechConfig = SpeechConfig.fromSubscription(Key_API.SpeechSubscriptionKey, Key_API.SpeechRegion);
-        // kwsModel = KeywordRecognitionModel.fromFile(copyAssetToCacheAndGetFilePath(Key_API.KwsModelFile));
+         //kwsModel = KeywordRecognitionModel.fromFile(copyAssetToCacheAndGetFilePath(Key_API.KwsModelFile));
         mic = view.findViewById(R.id.mic_assess);
         next = view.findViewById(R.id.next_pron);
         close = view.findViewById(R.id.close_pronun);
